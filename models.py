@@ -44,3 +44,5 @@ class OrarioPrenotabile(Base):
     __tablename__ = 'orari_prenotabili'
     id = Column(Integer, primary_key=True, autoincrement=True)
     orario = Column(Time, nullable=False)
+
+    prenotazioni = relationship("Prenotazione", back_populates="orario")

@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # Crea l'engine per collegarsi al database sqlite3
-DATABASE_URL = "sqlite:///./mydatabase.db"
+DATABASE_URL = "sqlite:///./pegasus_gourmet.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 # Crea la base da cui erediteranno i modelli
