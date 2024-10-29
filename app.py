@@ -1,4 +1,5 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask_assets import Environment, Bundle
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
 from datetime import date, time
@@ -6,6 +7,13 @@ import sqlite3, secrets
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
+
+# Configura Flask-Assets
+assets = Environment(app)
+
+# Crea un bundle per il file Sass
+scss = Bundle('scss/style.scss', filters='libsass', output='css/style.css')
+assets.register('scss_all', scss)
 
 
 # Homepage
@@ -28,7 +36,7 @@ def accedi():
         if utente and utente.check_password(password):
             # Login corretto, salva l'ID dell'utente nella sessione
             session["user_id"] = utente.id
-            flash("Login effettuato con successo!", "success")
+            #flash("Login effettuato con successo!", "success")
             return redirect(url_for("index"))
         else:
             flash("Email o password non corretti. Riprova.", "danger")

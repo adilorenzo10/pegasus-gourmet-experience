@@ -1,20 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="errors mb-3 row">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}" role="alert">
-                    {{ message }}
-                    </div>
-                {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
-    </div>
-
     <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
