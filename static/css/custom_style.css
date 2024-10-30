@@ -1,12 +1,4 @@
-:root {
-    --bs-primary: #d79c4a;
-}
-
 .carousel-item img {
     height: 600px;
     object-fit: cover;
-}
-
-nav.navbar .navbar-brand .logo-svg {
-    fill: #d79c4a;
 }

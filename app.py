@@ -14,7 +14,7 @@ assets = Environment(app)
 # Crea un bundle per il file Sass
 scss = Bundle('scss/style.scss', filters='libsass', output='css/style.css')
 assets.register('scss_all', scss)
-
+scss.build() # Solo in fase di sviluppo
 
 # Homepage
 @app.route("/")

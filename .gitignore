@@ -8,3 +8,12 @@ env/
 # Ignora la cache di Python
 __pycache__/
 *.py[cod]
+
+# Ignora la cache di webassets
+.webassets-cache/
+
+# Ignora i moduli npm
+node_modules/
+
+# Ignora i file di sistema di macOS
+.DS_Store
