@@ -14,7 +14,7 @@
             <!-- Colonna destra con form -->
             <div class="col-md-6 d-flex flex-column justify-content-center p-5">
                 <form method="POST">
-                    <div class="errors mb-3 row">
+                    <div class="errors mb-3">
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
                             {% for category, message in messages %}
@@ -29,7 +29,7 @@
                         <!-- Nome -->
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="nome" id="nome" autocomplete="new-password" required >
+                                <input type="text" class="form-control" name="nome" id="nome" placeholder="" autocomplete="new-password" required >
                                 <label for="nome">Nome</label>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                         <!-- Cognome -->
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="cognome" id="cognome"  autocomplete="new-password" required >
+                                <input type="text" class="form-control" name="cognome" id="cognome" placeholder="" autocomplete="new-password" required >
                                 <label for="cognome">Cognome</label>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
     
                     <!-- Email -->
                     <div class="form-floating my-3">
-                        <input type="email" class="form-control" name="email" id="email" autocomplete="new-password" required >
+                        <input type="email" class="form-control" name="email" id="email" placeholder="" autocomplete="new-password" required >
                         <label for="email">Email</label>
                     </div>
 
@@ -53,7 +53,7 @@
                         <!-- Password -->
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="password" class="form-control" name="password" id="password" autocomplete="new-password" required >
+                                <input type="password" class="form-control" name="password" id="password" placeholder="" autocomplete="new-password" required >
                                 <label for="password">Password</label>
                             </div>
                         </div>
@@ -61,7 +61,7 @@
                         <!-- Conferma password -->
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="password" class="form-control" name="conferma-password" id="conferma-password" autocomplete="new-password" required >
+                                <input type="password" class="form-control" name="conferma-password" id="conferma-password" placeholder="" autocomplete="new-password" required >
                                 <label for="conferma-password">Conferma password</label>
                             </div>
                         </div>

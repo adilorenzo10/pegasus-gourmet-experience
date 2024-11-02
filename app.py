@@ -3,7 +3,7 @@ from flask_assets import Environment, Bundle
 from markupsafe import Markup
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
-from datetime import date, time
+from datetime import date, datetime, time
 import sqlite3, secrets
 
 app = Flask(__name__)
@@ -35,7 +35,6 @@ def accedi():
         # Cerca l'utente nel database
         utente = db_session.query(Utente).filter_by(email=email).first()
         if utente and utente.check_password(password):
-            # Login corretto, salva l'ID dell'utente nella sessione
             session["user_id"] = utente.id
             #flash("Login effettuato con successo!", "success")
             return redirect(url_for("index"))
@@ -58,7 +57,7 @@ def registrati():
         password_ottenuta = request.form.get("password")
 
 
-         # Verifica se i campi obbligatori sono vuoti
+        # Verifica se i campi obbligatori sono vuoti
         if not all([nome_ottenuto, cognome_ottenuto, email_ottenuta, password_ottenuta]):
             flash("Tutti i campi sono obbligatori.", "warning")
             return redirect(url_for("registrati"))
@@ -82,28 +81,73 @@ def registrati():
                     db_session.close()
         else:
             flash("L'email inserita è già stata utilizzata. Riprova con un'altra oppure effettua l'accesso.", "danger")
-
                 
     return render_template("registrati.html")
 
 
 
 # Prenota un tavolo
-@app.route("/prenota")
+@app.route("/prenota", methods=["GET", "POST"])
 def prenota():
     user_id = session.get("user_id")
+
+    # Se l'utente non è loggato, reindirizza alla pagina di accesso
     if not user_id:
-        # Se l'utente non è loggato, reindirizza alla pagina di accesso
         flash(Markup("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
         return redirect(url_for("accedi"))
 
     # Crea una sessione con il database e recupera i dati utente
     db_session = SessionLocal()
-    utente = db_session.query(Utente).filter_by(id=user_id).first()
-    db_session.close()
+    try:
+        utente = db_session.query(Utente).filter_by(id=user_id).first()
+        orari_prenotabili = db_session.query(OrarioPrenotabile).all()
 
-    # Passa i dati dell'utente al template
-    return render_template("prenota.html", utente=utente)
+        # Azioni da svolgere inviando il form di prenotazione
+        if request.method == "POST":
+            # Dati prenotazione
+            data = request.form.get("data")
+            orario_prenotabile = request.form.get("orario")
+            tavolo_id = 1
+
+            # Verifica campi obbligatori e formato della data
+            if not data or not orario_prenotabile:
+                flash("Tutti i campi sono obbligatori.", "warning")
+                return redirect(url_for("prenota"))
+            
+            try:
+                data_formattata = datetime.strptime(data, '%Y-%m-%d').date()
+            except ValueError:
+                flash("La data inserita non è valida.", "danger")
+                return redirect(url_for("prenota"))
+
+            # Converti orario_prenotabile in intero
+            try:
+                orario_prenotabile_id = int(orario_prenotabile)
+            except ValueError:
+                flash("Seleziona un orario valido.", "danger")
+                return redirect(url_for("prenota"))
+
+            try:
+                # Crea la nuova prenotazione
+                nuova_prenotazione = Prenotazione(
+                    data=data_formattata,
+                    utente_id=user_id,
+                    tavolo_id=tavolo_id,
+                    orario_prenotabile_id=orario_prenotabile_id
+                )
+
+                db_session.add(nuova_prenotazione)        
+                db_session.commit()
+                flash("La prenotazione è stata accettata, puoi visualizzare tutte le tue prenotazioni nell'area utente.", "success")
+                return redirect(url_for("prenota"))
+            except Exception as e:
+                db_session.rollback()
+                flash(f"Errore durante la prenotazione: {e}", "danger")
+    finally:
+        db_session.close()
+
+    # Passa i dati dell'utente e gli orari al template
+    return render_template("prenota.html", utente=utente, orari=orari_prenotabili)
     
 
 # Chi siamo

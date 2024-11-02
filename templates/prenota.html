@@ -14,7 +14,7 @@
             <!-- Colonna destra con form -->
             <div class="col-md-6 d-flex flex-column justify-content-center p-5">
                 <form method="POST">
-                    <div class="errors mb-3 row">
+                    <div class="errors mb-3">
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
                             {% for category, message in messages %}
@@ -59,28 +59,12 @@
                     <div class="form-group my-3 border rounded floating-btn-check">
                         <label class="form-label d-block floating-label">Scegli orario</label>
                         <div class="d-flex flex-wrap gap-2 justify-content-start">
-                            <input type="radio" class="btn-check" name="orario" id="orario1" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="orario1">10:00</label>
-
-                            <input type="radio" class="btn-check" name="orario" id="orario2" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="orario2">12:00</label>
-
-                            <input type="radio" class="btn-check" name="orario" id="orario3" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="orario3">14:00</label>
-
-                            <!-- Aggiungi altri orari per testare la disposizione -->
-                            <input type="radio" class="btn-check" name="orario" id="orario4" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="orario4">16:00</label>
-
-                            <input type="radio" class="btn-check" name="orario" id="orario5" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="orario5">18:00</label>
-
-                            <input type="radio" class="btn-check" name="orario" id="orario6" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="orario6">20:00</label>
+                            {% for orario in orari %}
+                                <input type="radio" class="btn-check" name="orario" id="orario-{{orario.id}}" value="{{orario.id}}" autocomplete="off">
+                                <label class="btn btn-outline-primary" for="orario-{{orario.id}}">{{ orario.orario.strftime('%H:%M') }}</label>
+                            {% endfor %}
                         </div>
-                    </div>
-
-                    
+                    </div>       
 
                     <div class="mb-3 row">
                         <div class="d-flex justify-content-center">
