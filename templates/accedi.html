@@ -5,16 +5,16 @@
         <div class="row min-vh-100">
 
             <!-- Colonna sinistra con sfondo e testo -->
-            <div class="col-md-5 d-flex flex-column justify-content-center align-items-center bg-primary text-white text-center p-5">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
                 <i class="bi bi-box-arrow-in-right fs-1"></i>
                 <h1 class="mb-3">Accedi</h1>
                 <p>Scopri esperienze culinarie uniche con Pegasus. Accedi con il tuo account per prenotare il tuo tavolo ed esplorare nuovi sapori.</p>
             </div>
             
             <!-- Colonna destra con form -->
-            <div class="col-md-7 d-flex flex-column justify-content-center p-5">
+            <div class="col-md-6 d-flex flex-column justify-content-center p-5">
                 <form method="POST">
-                    <div class="errors mb-3 row">
+                    <div class="errors mb-3">
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
                             {% for category, message in messages %}
@@ -25,26 +25,16 @@
                             {% endif %}
                         {% endwith %}
                     </div>
-                    <div class="mb-3 row">
-                        <label for="email" class="col-4 col-form-label">Email</label>
-                        <div class="col-8">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Inserisci la tua email"/>
-                        </div>
+
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" name="email" id="email">
+                        <label for="email">Email</label>
                     </div>
 
-                    <div class="mb-3 row">
-                        <label for="password" class="col-4 col-form-label">Password</label>
-                        <div class="col-8">
-                            <input
-                                type="password"
-                                class="form-control"
-                                name="password"
-                                id="password"
-                                placeholder="Inserisci password"
-                            />
-                        </div>
-                    </div>
-                    
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" name="password" id="password" autocomplete="new-password">
+                        <label for="password">Password</label>
+                    </div>                    
                     
                     <div class="mb-3 row">
                         <div class="offset-sm-4 col-sm-8">

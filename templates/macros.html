@@ -1,0 +1,14 @@
+{% macro nav_link(endpoint, label) %}
+    <a class="nav-link {% if request.path == url_for(endpoint) %}active{% endif %}" href="{{ url_for(endpoint) }}">{{ label }}</a>
+{% endmacro %}
+
+{% macro nav_dropdown(label, items) %}
+        <a class="nav-link dropdown-toggle" href="#" id="{{ label | lower | replace(' ', '_') }}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ label }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="{{ label | lower | replace(' ', '_') }}">
+            {% for item in items %}
+                <a class="dropdown-item" href="{{ url_for(item.endpoint) }}">{{ item.label }}</a>
+            {% endfor %}
+        </div>
+{% endmacro %}

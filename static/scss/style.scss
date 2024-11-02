@@ -1,26 +1,17 @@
-// static/scss/style.scss
+//$primary: #854e42;
+$primary: #d2ae6a;
 
-// Definizione del colore principale
-$primary: #d79c4a;
-
-// Sovrascrittura delle variabili di Bootstrap per btn-primary
-$btn-primary-bg: $primary;
-$btn-primary-color: #ffffff; // Imposta il testo bianco
-$btn-primary-border-color: $primary;
-$btn-primary-hover-bg: darken($primary, 5%);
-$btn-primary-hover-border-color: darken($primary, 10%);
-$btn-primary-hover-color: #ffffff;
-$btn-primary-active-bg: darken($primary, 10%);
-$btn-primary-active-border-color: darken($primary, 15%);
-$btn-primary-active-color: #ffffff;
-$btn-primary-disabled-bg: $primary;
-$btn-primary-disabled-border-color: $primary;
-$btn-primary-disabled-color: #ffffff;
-
-// Importa Bootstrap con le variabili personalizzate
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
 @import "../../node_modules/bootstrap/scss/bootstrap";
 
-// Stili personalizzati per il logo, usando il colore primary
+
+// Stili personalizzati
 nav.navbar .navbar-brand .logo-svg {
     fill: $primary;
+}
+
+div.bg-primary{
+    color: #000000;
 }

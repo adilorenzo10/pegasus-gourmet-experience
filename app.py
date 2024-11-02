@@ -1,5 +1,6 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_assets import Environment, Bundle
+from markupsafe import Markup
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
 from datetime import date, time
@@ -85,6 +86,35 @@ def registrati():
                 
     return render_template("registrati.html")
 
+
+
+# Prenota un tavolo
+@app.route("/prenota")
+def prenota():
+    user_id = session.get("user_id")
+    if not user_id:
+        # Se l'utente non è loggato, reindirizza alla pagina di accesso
+        flash(Markup("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
+        return redirect(url_for("accedi"))
+
+    # Crea una sessione con il database e recupera i dati utente
+    db_session = SessionLocal()
+    utente = db_session.query(Utente).filter_by(id=user_id).first()
+    db_session.close()
+
+    # Passa i dati dell'utente al template
+    return render_template("prenota.html", utente=utente)
+    
+
+# Chi siamo
+@app.route("/chi-siamo")
+def chi_siamo():
+    return render_template("chi_siamo.html")
+
+# Il mio account
+@app.route("/il-mio-account")
+def il_mio_account():
+    return render_template("il_mio_account.html")
 
 # Logout
 @app.route("/logout")

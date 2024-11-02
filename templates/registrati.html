@@ -5,14 +5,14 @@
         <div class="row min-vh-100">
 
             <!-- Colonna sinistra con sfondo e testo -->
-            <div class="col-md-5 d-flex flex-column justify-content-center align-items-center bg-primary text-white text-center p-5">
+            <div class="col-md-6 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
                 <i class="bi bi-person-lines-fill fs-1"></i> 
                 <h1 class="mb-3">Registrati</h1>
                 <p>Crea un nuovo account per prenotare il tuo tavolo ed avere un dettaglio delle tue prenotazioni.</p>
             </div>
             
             <!-- Colonna destra con form -->
-            <div class="col-md-7 d-flex flex-column justify-content-center p-5">
+            <div class="col-md-6 d-flex flex-column justify-content-center p-5">
                 <form method="POST">
                     <div class="errors mb-3 row">
                         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -25,84 +25,53 @@
                             {% endif %}
                         {% endwith %}
                     </div>
-                    <div class="mb-3 row">
-                        <label for="nome" class="col-12 col-md-3 col-form-label">Nome</label>
-                        <div class="col-12 col-md-3">
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="nome"
-                                id="nome"
-                                placeholder="Inserisci nome"
-                                required
-                            />
+                    <div class="row g-2">
+                        <!-- Nome -->
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="nome" id="nome" autocomplete="new-password" required >
+                                <label for="nome">Nome</label>
+                            </div>
                         </div>
-
-                        <div class="mb-3 d-md-none"></div>
-
-                        <label for="cognome" class="col-12 col-md-3 col-form-label">Cognome</label>
-                        <div class="col-12 col-md-3">
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="cognome"
-                                id="cognome"
-                                placeholder="Inserisci cognome"
-                                required
-                            />
+    
+                        <!-- Cognome -->
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="cognome" id="cognome"  autocomplete="new-password" required >
+                                <label for="cognome">Cognome</label>
+                            </div>
                         </div>
                     </div>
-                    
-                    
-                    <div class="mb-3 row">
-                        <label for="email" class="col-12 col-md-3 col-form-label">Email</label>
-                        <div class="col-12 col-md-9">
-                            <input 
-                                type="email" 
-                                class="form-control" 
-                                name="email" 
-                                id="email" 
-                                placeholder="Inserisci la tua email"
-                                required
-                            />
-                        </div>
+    
+                    <!-- Email -->
+                    <div class="form-floating my-3">
+                        <input type="email" class="form-control" name="email" id="email" autocomplete="new-password" required >
+                        <label for="email">Email</label>
                     </div>
 
-
-                    <div class="mb-3 row">
-                        <label for="password" class="col-12 col-md-3 col-form-label">Password</label>
-                        <div class="col-12 col-md-9">
-                            <input
-                                type="password"
-                                class="form-control"
-                                name="password"
-                                id="password"
-                                placeholder="Inserisci password"
-                                required
-                            />
+                    <div class="row g-2">
+                        <!-- Password -->
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" name="password" id="password" autocomplete="new-password" required >
+                                <label for="password">Password</label>
+                            </div>
+                        </div>
+    
+                        <!-- Conferma password -->
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="password" class="form-control" name="conferma-password" id="conferma-password" autocomplete="new-password" required >
+                                <label for="conferma-password">Conferma password</label>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-3 row">
-                        <label for="confirm-password" class="col-12 col-md-3 col-form-label">Conferma password</label>
-                        <div class="col-12 col-md-9">
-                            <input
-                                type="password"
-                                class="form-control"
-                                name="conferma-password"
-                                id="conferma-password"
-                                placeholder="Conferma la password inserita"
-                                required
-                            />
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="mb-3 row">
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary">
-                                Registrati
-                            </button>
-                        </div>
+    
+                    <!-- Bottone di submit -->
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            Registrati
+                        </button>
                     </div>
                 </form>
             </div>
