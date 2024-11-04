@@ -1,6 +1,8 @@
+import random
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_assets import Environment, Bundle
 from markupsafe import Markup
+from sqlalchemy import and_
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
 from datetime import date, datetime, time
@@ -113,9 +115,34 @@ def prenota():
             if not data or not orario_prenotabile:
                 flash("Tutti i campi sono obbligatori.", "warning")
                 return redirect(url_for("prenota"))
+
+
+            try:
+                tavoli_non_prenotati = (
+                    db_session.query(Tavolo)
+                    .outerjoin(Prenotazione, and_(
+                        Prenotazione.tavolo_id == Tavolo.id,
+                        Prenotazione.data == data,
+                        Prenotazione.orario_prenotabile_id == orario_prenotabile
+                    ))
+                    .filter(Prenotazione.id == None)
+                    .all()
+                )
+                if tavoli_non_prenotati:
+                    # Ricava random un id dei tavoli non prenotati
+                    tavolo_id = random.choice(tavoli_non_prenotati).id
+                else:
+                    # Gestisci il caso in cui non ci siano tavoli disponibili
+                    flash("Nessun tavolo disponibile per la data e l'orario selezionati.", "warning")
+                    return redirect(url_for("prenota"))
+
+            except ValueError:
+                flash("Errore nella query per ottenere i tavoli non prenotati.", "danger")
+                return redirect(url_for("prenota"))
             
             try:
                 data_formattata = datetime.strptime(data, '%Y-%m-%d').date()
+
             except ValueError:
                 flash("La data inserita non è valida.", "danger")
                 return redirect(url_for("prenota"))
