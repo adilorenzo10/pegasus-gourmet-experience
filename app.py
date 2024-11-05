@@ -2,13 +2,15 @@ import random
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_assets import Environment, Bundle
 from markupsafe import Markup
-from sqlalchemy import and_ 
+from sqlalchemy import and_, desc 
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
 from datetime import date, datetime, time
 from ajax import ajax
 import sqlite3, secrets
 from sqlalchemy.orm import joinedload
+from babel.dates import format_date
+
 
 
 app = Flask(__name__)
@@ -112,6 +114,7 @@ def prenota():
         if request.method == "POST":
             # Dati prenotazione
             data = request.form.get("data")
+            numero_persone = request.form.get("numero_persone")
             orario_prenotabile = request.form.get("orario")
             tavolo_id = 1
 
@@ -162,6 +165,7 @@ def prenota():
                 # Crea la nuova prenotazione
                 nuova_prenotazione = Prenotazione(
                     data=data_formattata,
+                    numero_persone=numero_persone,
                     utente_id=user_id,
                     tavolo_id=tavolo_id,
                     orario_prenotabile_id=orario_prenotabile_id
@@ -213,6 +217,7 @@ def le_mie_prenotazioni():
                 joinedload(Prenotazione.orario),  # Carica l'orario della prenotazione
                 joinedload(Prenotazione.tavolo)   # Carica il tavolo della prenotazione
             )
+            .order_by(desc(Prenotazione.data), desc(OrarioPrenotabile.orario))  # Ordinamento per data e orario decrescenti
             .all()
         )
     except ValueError:
@@ -221,7 +226,7 @@ def le_mie_prenotazioni():
     finally:
         db_session.close()
     
-    return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni)
+    return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni, datetime = datetime)
 
 # Modifica profilo
 @app.route("/modifica-profilo")
@@ -234,3 +239,8 @@ def logout():
     session.pop("user_id", None)
     flash("Logout effettuato con successo!", "success")
     return redirect(url_for("accedi"))
+
+# Filtro data formattata
+@app.template_filter("data_formattata")
+def data_formattata(data):
+    return format_date(data, "EE dd MMM YYYY", locale="it_IT")

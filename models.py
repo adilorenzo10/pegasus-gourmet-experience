@@ -33,6 +33,7 @@ class Prenotazione(Base):
     __tablename__ = 'prenotazioni'
     id = Column(Integer, primary_key=True, autoincrement=True)
     data = Column(Date, nullable=False)
+    numero_persone = Column(Integer, nullable=False)
     utente_id = Column(Integer, ForeignKey('utenti.id'))
     tavolo_id = Column(Integer, ForeignKey('tavoli.id'))
     orario_prenotabile_id = Column(Integer, ForeignKey('orari_prenotabili.id'))

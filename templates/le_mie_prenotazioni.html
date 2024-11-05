@@ -6,26 +6,50 @@
             <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
                 <i class="bi bi-box-arrow-in-right fs-1"></i>
                 <h1 class="mb-3">Le mie prenotazioni</h1>
-                <p>Qui troverai lo storico di tutte le tue prenotazioni.</p>
+                <p>Qui troverai lo storico di tutte le tue prenotazioni. Nota, puoi cancellare una prenotazione fino ad un'ora prima dell'appuntamento.</p>
             </div>
         </div>
         <div class="row">
             <div class="col-12 d-flex flex-column p-5">
                 <div class="list-group">
                     {% for prenotazione in prenotazioni %}
-                        <a href="#" class="list-group-item list-group-item-action">
+                        <div class="list-group-item list-group-item-action prenotazione" data-id="{{ prenotazione.id }}">
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">Data: {{ prenotazione.data }}, Ora: {{prenotazione.orario.orario.strftime("%H:%M")}}</h5>
-                                <small class="text-success">Confermata</small>
+                                <!-- Informazioni sulla prenotazione -->
+                                <div>
+                                    <h6 class="mb-1">
+                                        <i class="bi bi-calendar3"></i>
+                                        {{ prenotazione.data|data_formattata }}
+                                    </h6>
+                                    <h6 class="mb-1">
+                                        <i class="bi bi-clock"></i>
+                                        {{ prenotazione.orario.orario.strftime("%H:%M") }}
+                                    </h6>
+                                    <h6 class="mb-1">
+                                        <i class="bi bi-people-fill"></i>
+                                        {{ prenotazione.numero_persone }}
+                                    </h6>
+                                    <h6 class="mb-1">
+                                        <i class="bi bi-hash"></i>
+                                        Tavolo {{ prenotazione.tavolo.numero }}
+                                    </h6>
+                                </div>
+                                
+                                <!-- Stato della prenotazione e pulsante cancella -->
+                                <div class="text-end d-flex flex-column justify-content-between">
+                                    <small class="text-success d-block">Confermata</small>
+                                    {% set current_date = datetime.utcnow().date() %}
+                                    {% set current_time = datetime.utcnow().time() %}
+                                    {% if prenotazione.data > current_date or (prenotazione.data == current_date and prenotazione.orario.orario > current_time) %}
+                                        <button class="btn btn-danger btn-sm mt-2 cancella-prenotazione" data-id_prenotazione="{{ prenotazione.id }}">Cancella</button>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <p class="mb-1">Tavolo: {{ prenotazione.tavolo.numero }}</p>
-                            <div class="mt-2">
-                                <button class="btn btn-primary btn-sm">Modifica</button>
-                                <button class="btn btn-danger btn-sm">Cancella</button>
-                            </div>
-                        </a>
+                        </div>
                     {% endfor %}
+                </div>
             </div>
         </div>
+        
     </div>
 {% endblock %}
