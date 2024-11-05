@@ -2,13 +2,17 @@ import random
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_assets import Environment, Bundle
 from markupsafe import Markup
-from sqlalchemy import and_
+from sqlalchemy import and_ 
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
 from datetime import date, datetime, time
+from ajax import ajax
 import sqlite3, secrets
+from sqlalchemy.orm import joinedload
+
 
 app = Flask(__name__)
+app.register_blueprint(ajax, url_prefix="/ajax")
 app.secret_key = secrets.token_hex(16)
 
 # Configura Flask-Assets
@@ -186,6 +190,43 @@ def chi_siamo():
 @app.route("/il-mio-account")
 def il_mio_account():
     return render_template("il_mio_account.html")
+
+# Le mie prenotazioni
+@app.route("/le-mie-prenotazioni")
+def le_mie_prenotazioni():
+    user_id = session.get("user_id")
+
+    # Se l'utente non è loggato, reindirizza alla pagina di accesso
+    if not user_id:
+        flash(Markup("Per favore accedi per visualizzare le tue prenotazioni. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
+        return redirect(url_for("accedi"))
+
+    # Crea una sessione con il database e recupera i dati utente
+    db_session = SessionLocal()
+    try:
+        mie_prenotazioni = (
+            db_session.query(Prenotazione)
+            .filter_by(utente_id=user_id)
+            .join(OrarioPrenotabile, Prenotazione.orario_prenotabile_id == OrarioPrenotabile.id)
+            .join(Tavolo, Prenotazione.tavolo_id == Tavolo.id)
+            .options(
+                joinedload(Prenotazione.orario),  # Carica l'orario della prenotazione
+                joinedload(Prenotazione.tavolo)   # Carica il tavolo della prenotazione
+            )
+            .all()
+        )
+    except ValueError:
+                flash("Seleziona un orario valido.", "danger")
+                return redirect(url_for("prenota"))
+    finally:
+        db_session.close()
+    
+    return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni)
+
+# Modifica profilo
+@app.route("/modifica-profilo")
+def modifica_profilo():
+    return render_template("modifica_profilo.html")
 
 # Logout
 @app.route("/logout")

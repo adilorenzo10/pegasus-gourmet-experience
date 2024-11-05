@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
+                <i class="bi bi-box-arrow-in-right fs-1"></i>
+                <h1 class="mb-3">Le mie prenotazioni</h1>
+                <p>Qui troverai lo storico di tutte le tue prenotazioni.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 d-flex flex-column p-5">
+                <div class="list-group">
+                    {% for prenotazione in prenotazioni %}
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Data: {{ prenotazione.data }}, Ora: {{prenotazione.orario.orario.strftime("%H:%M")}}</h5>
+                                <small class="text-success">Confermata</small>
+                            </div>
+                            <p class="mb-1">Tavolo: {{ prenotazione.tavolo.numero }}</p>
+                            <div class="mt-2">
+                                <button class="btn btn-primary btn-sm">Modifica</button>
+                                <button class="btn btn-danger btn-sm">Cancella</button>
+                            </div>
+                        </a>
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

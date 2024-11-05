@@ -100,6 +100,8 @@
                             {% if session.get("user_id") %}
                                 <li class="nav-item dropdown">
                                     {{ macros.nav_dropdown("Il mio account", [
+                                        {"endpoint": "le_mie_prenotazioni", "label": "Le mie prenotazioni"},
+                                        {"endpoint": "modifica_profilo", "label": "Modifica profilo"},
                                         {"endpoint": "logout", "label": "Logout"}
                                     ]) }}
                                 </li>
@@ -144,6 +146,6 @@
         ></script>
         <script
             src="{{ url_for('static', filename='js/prenota.js') }}"
-            ></script>
+        ></script>
     </body>
 </html>

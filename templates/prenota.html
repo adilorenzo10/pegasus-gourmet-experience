@@ -29,7 +29,7 @@
                         <!-- Nome -->
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="nome" id="nome" value="{{utente.nome}}" disabled >
+                                <input type="text" class="form-control fst-italic" name="nome" id="nome" value="{{utente.nome}}" disabled >
                                 <label for="nome">Nome</label>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                         <!-- Cognome -->
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="cognome" id="cognome" value="{{utente.cognome}}" disabled >
+                                <input type="text" class="form-control fst-italic" name="cognome" id="cognome" value="{{utente.cognome}}" disabled >
                                 <label for="cognome">Cognome</label>
                             </div>
                         </div>
@@ -45,7 +45,7 @@
     
                     <!-- Email -->
                     <div class="form-floating my-3">
-                        <input type="email" class="form-control" name="email" id="email" value="{{utente.email}}" disabled >
+                        <input type="email" class="form-control fst-italic" name="email" id="email" value="{{utente.email}}" disabled >
                         <label for="email">Email</label>
                     </div>
 
@@ -54,20 +54,27 @@
                         <input type="date" class="form-control" name="data" id="data" required>
                         <label for="data">Per quale giorno vuoi prenotare il tuo tavolo?</label>
                     </div>
+
+                    <!-- Messaggio nessun orario -->
+                    <div class="errore-nessun-orario mb-3 d-none">
+                        <div class="alert alert-danger" role="alert">
+                            Nessun orario disponibile nella data selezionata. Scegli un altro giorno!
+                        </div>
+                    </div>
                     
                     <!-- Orario -->
                     <div class="form-group my-3 border rounded floating-btn-check sez-orari d-none">
                         <label class="form-label d-block floating-label">Scegli orario</label>
                         <div class="d-flex flex-wrap gap-2 justify-content-start">
                             {% for orario in orari %}
-                                <input type="radio" class="btn-check" name="orario" id="orario-{{orario.id}}" value="{{orario.id}}" autocomplete="off">
-                                <label class="btn btn-outline-primary" for="orario-{{orario.id}}">{{ orario.orario.strftime('%H:%M') }}</label>
+                                <input type="radio" class="btn-check input-orario" name="orario" id="orario-{{orario.id}}" value="{{orario.id}}" autocomplete="off">
+                                <label class="btn btn-outline-primary label-orario" data-orario-id="{{orario.id}}" for="orario-{{orario.id}}">{{ orario.orario.strftime('%H:%M') }}</label>
                             {% endfor %}
                         </div>
-                    </div>       
+                    </div> 
 
-                    <div class="mb-3 row">
-                        <div class="d-flex justify-content-center d-none">
+                    <div class="mb-3 row riga-pulsante-prenota d-none">
+                        <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">
                                 Prenota
                             </button>

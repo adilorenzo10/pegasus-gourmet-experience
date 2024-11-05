@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
+                <i class="bi bi-box-arrow-in-right fs-1"></i>
+                <h1 class="mb-3">Modifica profilo</h1>
+                <p>In questa pagina è possibile modificare i dati del profilo.</p>
+            </div>
+        </div>
+    
+        <div class="row g-2">
+            <!-- Nome -->
+            <div class="col-md">
+                <div class="form-floating">
+                    <input type="text" class="form-control" name="nome" id="nome" placeholder="" autocomplete="new-password" required >
+                    <label for="nome">Nome</label>
+                </div>
+            </div>
+
+            <!-- Cognome -->
+            <div class="col-md">
+                <div class="form-floating">
+                    <input type="text" class="form-control" name="cognome" id="cognome" placeholder="" autocomplete="new-password" required >
+                    <label for="cognome">Cognome</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-floating my-3">
+            <input type="email" class="form-control" name="email" id="email" placeholder="" autocomplete="new-password" required >
+            <label for="email">Email</label>
+        </div>
+
+        <div class="row g-2">
+            <!-- Password -->
+            <div class="col-md">
+                <div class="form-floating">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="" autocomplete="new-password" required >
+                    <label for="password">Password</label>
+                </div>
+            </div>
+
+            <!-- Conferma password -->
+            <div class="col-md">
+                <div class="form-floating">
+                    <input type="password" class="form-control" name="conferma-password" id="conferma-password" placeholder="" autocomplete="new-password" required >
+                    <label for="conferma-password">Conferma password</label>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
