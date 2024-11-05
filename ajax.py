@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, session
 from database import SessionLocal
 from models import OrarioPrenotabile, Prenotazione
 from datetime import datetime
@@ -44,3 +44,22 @@ def cancella_prenotazione():
         db_session.close()
 
     return jsonify(esito)
+
+@ajax.route("/verifica_data_prenotazione", methods=["POST"])
+def verifica_data_prenotazione():
+    data_selezionata = request.json.get("data")  # type: ignore
+    user_id = session.get("user_id")
+
+    db_session = SessionLocal()
+
+    try:
+        # Ottieni prenotazioni utente nella data selezionata
+        prenotazioni = db_session.query(Prenotazione).filter_by(data=data_selezionata, utente_id=user_id).all()
+        if prenotazioni:
+            return jsonify({"prenotazione_esiste": True})
+        else:
+            return jsonify({"prenotazione_esiste": False})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()

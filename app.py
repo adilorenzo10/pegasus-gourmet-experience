@@ -5,7 +5,7 @@ from markupsafe import Markup
 from sqlalchemy import and_, desc 
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timezone
 from ajax import ajax
 import sqlite3, secrets
 from sqlalchemy.orm import joinedload
@@ -98,6 +98,7 @@ def registrati():
 @app.route("/prenota", methods=["GET", "POST"])
 def prenota():
     user_id = session.get("user_id")
+    today = datetime.now(timezone.utc).date()
 
     # Se l'utente non è loggato, reindirizza alla pagina di accesso
     if not user_id:
@@ -182,7 +183,7 @@ def prenota():
         db_session.close()
 
     # Passa i dati dell'utente e gli orari al template
-    return render_template("prenota.html", utente=utente, orari=orari_prenotabili)
+    return render_template("prenota.html", utente=utente, orari=orari_prenotabili, today=today)
     
 
 # Chi siamo
