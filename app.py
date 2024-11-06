@@ -174,8 +174,8 @@ def prenota():
 
                 db_session.add(nuova_prenotazione)        
                 db_session.commit()
-                flash("La prenotazione è stata accettata, puoi visualizzare tutte le tue prenotazioni nell'area utente.", "success")
-                return redirect(url_for("prenota"))
+                flash("La prenotazione è stata accettata, in questa pagina puoi visualizzare tutte le tue prenotazioni.", "success")
+                return redirect(url_for("le_mie_prenotazioni"))
             except Exception as e:
                 db_session.rollback()
                 flash(f"Errore durante la prenotazione: {e}", "danger")

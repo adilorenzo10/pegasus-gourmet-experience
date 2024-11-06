@@ -15,7 +15,7 @@ function verificaPrenotazione(dataSelezionata) {
         success: function(response) {
             if (response.prenotazione_esiste) {
                 // Se esiste già una prenotazione, mostra il messaggio specifico
-                $("#errore-orario-testo").text("Non sono disponibili orari perché hai già prenotato un tavolo nella data selezionata. È possibile prenotare un solo tavolo al giorno.");
+                $(".errore-nessun-orario .alert").text("Non sono disponibili orari perché hai già prenotato un tavolo nella data selezionata. È possibile prenotare un solo tavolo al giorno.");
                 $(".errore-nessun-orario").removeClass("d-none");
             } else {
                 // Se non ci sono prenotazioni, carica gli orari disponibili
@@ -74,11 +74,11 @@ function mostraOrariDisponibili(orariDisponibili, dataSelezionata) {
         if (orariDisponibiliCount > 0) {
             $(".sez-orari, .riga-pulsante-prenota").removeClass("d-none");
         } else {
-            $("#errore-orario-testo").text("Nessun orario disponibile nella data selezionata. Scegli un altro giorno!");
+            $(".errore-nessun-orario .alert").text("Nessun orario disponibile nella data selezionata. Scegli un altro giorno!");
             $(".errore-nessun-orario").removeClass("d-none");
         }
     } else {
-        $("#errore-orario-testo").text("Nessun orario disponibile nella data selezionata. Scegli un altro giorno!");
+        $(".errore-nessun-orario .alert").text("Nessun orario disponibile nella data selezionata. Scegli un altro giorno!");
         $(".errore-nessun-orario").removeClass("d-none");
     }
 }
