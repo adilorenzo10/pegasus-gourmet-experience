@@ -30,11 +30,12 @@
             <nav class="navbar navbar-expand-md navbar-light bg-light">
                 <div class="container">
                     <!-- Logo del sito ancorato a sinistra -->
-                    <a class="navbar-brand" href="{{ url_for('index') }}">
+                    <a class="navbar-brand d-inline-flex align-items-center gap-2" href="{{ url_for('index') }}">
                         <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                             width="60px" height="60px" viewBox="0 0 577.000000 569.000000"
-                            preserveAspectRatio="xMidYMid meet" class="logo-svg">
-
+                            preserveAspectRatio="xMidYMid meet" class="logo-svg" aria-labelledby="logoTitle">
+                            
+                            <title id="logoTitle">Pegasus Gourmet Logo</title>
                             <g transform="translate(0.000000,569.000000) scale(0.100000,-0.100000)" stroke="none">
                                 <path d="M2910 4214 c-36 -6 -145 -33 -215 -54 -230 -70 -462 -229 -610 -420
                                 -96 -123 -99 -133 -14 -48 119 118 243 208 384 278 211 104 375 143 595 142
@@ -73,7 +74,7 @@
                                 26 -82 32 -18 7 -36 15 -39 19 -15 15 -26 6 -13 -10z"/>
                             </g>
                         </svg>
-                        Pegasus Gourmet Experience
+                        <span class="d-none d-lg-block">Pegasus Gourmet Experience</span>
                     </a>
                     
                     <!-- Bottone per il menu su dispositivi piccoli -->
@@ -149,6 +150,9 @@
         ></script>
         <script
             src="{{ url_for('static', filename='js/le_mie_prenotazioni.js') }}"
+        ></script>
+        <script
+            src="{{ url_for('static', filename='js/modifica_profilo.js') }}"
         ></script>
     </body>
 </html>

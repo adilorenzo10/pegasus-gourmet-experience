@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
-                <i class="bi bi-box-arrow-in-right fs-1"></i>
+                <i class="bi bi-book fs-1"></i>
                 <h1 class="mb-3">Le mie prenotazioni</h1>
                 <p>Qui puoi visualizzare lo storico completo delle tue prenotazioni. Ricorda: puoi annullare una prenotazione fino a un’ora prima dell’orario previsto.</p>
                 <a href="{{ url_for('prenota') }}" class="btn btn-outline-dark" tabindex="-1" role="button">Prenota un altro tavolo</a>
@@ -54,6 +54,7 @@
                                     {% set current_date = datetime.utcnow().date() %}
                                     {% set current_time = datetime.utcnow().time() %}
                                     {% if prenotazione.data > current_date or (prenotazione.data == current_date and prenotazione.orario.orario > current_time) %}
+                                        <button class="btn btn-primary btn-sm mt-2 modifica-prenotazione" data-id_prenotazione="{{ prenotazione.id }}">Modifica</button>
                                         <button class="btn btn-danger btn-sm mt-2 cancella-prenotazione" data-id_prenotazione="{{ prenotazione.id }}">Cancella</button>
                                     {% endif %}
                                 </div>

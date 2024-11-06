@@ -4,52 +4,87 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
-                <i class="bi bi-box-arrow-in-right fs-1"></i>
+                <i class="bi bi-pencil-square fs-1"></i>
                 <h1 class="mb-3">Modifica profilo</h1>
                 <p>In questa pagina è possibile modificare i dati del profilo.</p>
             </div>
         </div>
-    
-        <div class="row g-2">
-            <!-- Nome -->
-            <div class="col-md">
-                <div class="form-floating">
-                    <input type="text" class="form-control" name="nome" id="nome" placeholder="" autocomplete="new-password" required >
-                    <label for="nome">Nome</label>
+        <div class="col-12 d-flex flex-column p-5">
+            <form method="POST">
+                <div class="row g-2">
+                    <div class="errors mb-3">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}" role="alert">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+            
+                    <!-- Nome -->
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="nome" id="nome" value="{{ utente.nome }}" placeholder="" autocomplete="new-password" required >
+                            <label for="nome">Nome</label>
+                        </div>
+                    </div>
+            
+                    <!-- Cognome -->
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="cognome" id="cognome" value="{{ utente.cognome }}" placeholder="" autocomplete="new-password" required >
+                            <label for="cognome">Cognome</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Cognome -->
-            <div class="col-md">
-                <div class="form-floating">
-                    <input type="text" class="form-control" name="cognome" id="cognome" placeholder="" autocomplete="new-password" required >
-                    <label for="cognome">Cognome</label>
+                
+                <!-- Email -->
+                <div class="row g-2 mt-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="email" class="form-control" name="email" id="email" value="{{ utente.email }}"placeholder="" autocomplete="new-password" required >
+                            <label for="email">Email</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Email -->
-        <div class="form-floating my-3">
-            <input type="email" class="form-control" name="email" id="email" placeholder="" autocomplete="new-password" required >
-            <label for="email">Email</label>
-        </div>
-
-        <div class="row g-2">
-            <!-- Password -->
-            <div class="col-md">
-                <div class="form-floating">
-                    <input type="password" class="form-control" name="password" id="password" placeholder="" autocomplete="new-password" required >
-                    <label for="password">Password</label>
+            
+                <div class="row g-2 mt-2">
+                    <div class="col-md">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="toggle-modifica-password">
+                            <label class="form-check-label" for="toggle-modifica-password">Voglio modificare la password</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Conferma password -->
-            <div class="col-md">
-                <div class="form-floating">
-                    <input type="password" class="form-control" name="conferma-password" id="conferma-password" placeholder="" autocomplete="new-password" required >
-                    <label for="conferma-password">Conferma password</label>
+                <div class="row g-2 mt-2 sez-modifica-password d-none">
+                    <!-- Password attuale -->
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="password" class="form-control disabled" name="password-attuale" id="password-attuale" placeholder="" autocomplete="new-password" >
+                            <label for="password-attuale">Password attuale</label>
+                        </div>
+                    </div>
+
+                    <!-- Nuova password -->
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="password" class="form-control disabled" name="password" id="password" placeholder="" autocomplete="new-password" >
+                            <label for="password">Nuova password</label>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+                <div class="mb-3 row g-2 mt-2">
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">
+                            Applica modifiche
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>        
     </div>
 {% endblock %}

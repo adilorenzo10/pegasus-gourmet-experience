@@ -222,17 +222,70 @@ def le_mie_prenotazioni():
             .all()
         )
     except ValueError:
-                flash("Seleziona un orario valido.", "danger")
-                return redirect(url_for("prenota"))
+        flash("Seleziona un orario valido.", "danger")
+        return redirect(url_for("prenota"))
     finally:
         db_session.close()
     
     return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni, datetime = datetime)
 
 # Modifica profilo
-@app.route("/modifica-profilo")
+@app.route("/modifica-profilo", methods=["GET", "POST"])
 def modifica_profilo():
-    return render_template("modifica_profilo.html")
+    user_id = session.get("user_id")
+
+    # Se l'utente non è loggato, reindirizza alla pagina di accesso
+    if not user_id:
+        flash(Markup("Sei stato disconnesso, per favore, effettua di nuovo l'accesso. Se non hai un account, <a href='/registrati'>registrati</a> subito!"), "warning")
+        return redirect(url_for("accedi"))
+
+    # Crea una sessione con il database e recupera i dati utente
+    db_session = SessionLocal()
+    utente = db_session.query(Utente).filter_by(id=user_id).first()
+
+    if not utente:
+        flash("Dati utente non trovati.", "danger")
+        return redirect(url_for("index"))
+    
+    if request.method == "POST":
+        # Recupera i dati dal form
+        nome = request.form.get("nome")
+        cognome = request.form.get("cognome")
+        email = request.form.get("email")
+
+        # Aggiorna i dati utente
+        setattr(utente, 'nome', nome)
+        setattr(utente, 'cognome', cognome)
+        setattr(utente, 'email', email)
+
+        # Se l'utente desidera cambiare la password
+        if request.form.get("password-attuale") and request.form.get("password"):
+            password_attuale = request.form.get("password-attuale")
+            nuova_password = request.form.get("password")
+
+            # Verifica la password attuale
+            if not utente.check_password(password_attuale):
+                flash("La password attuale è errata.", "danger")
+                return redirect(url_for("modifica_profilo"))
+
+            # Imposta la nuova password
+            utente.set_password(nuova_password)
+
+        # Salva le modifiche nel database
+        try:
+            db_session.commit()
+            flash("Il profilo è stato aggiornato con successo.", "success")
+        except Exception as e:
+            db_session.rollback()
+            flash(f"Errore durante l'aggiornamento del profilo: {e}", "danger")
+        finally:
+            db_session.close()
+
+        return redirect(url_for("modifica_profilo"))
+
+    # GET: Mostra il form di modifica profilo con i dati utente
+    return render_template("modifica_profilo.html", utente=utente)
+
 
 # Logout
 @app.route("/logout")
