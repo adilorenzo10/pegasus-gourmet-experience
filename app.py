@@ -93,7 +93,7 @@ def registrati():
     return render_template("registrati.html")
 
 
-
+'''
 # Prenota un tavolo
 @app.route("/prenota", methods=["GET", "POST"])
 def prenota():
@@ -184,7 +184,103 @@ def prenota():
 
     # Passa i dati dell'utente e gli orari al template
     return render_template("prenota.html", utente=utente, orari=orari_prenotabili, today=today)
-    
+'''
+
+# Prenota o modifica un tavolo
+@app.route("/prenota", methods=["GET", "POST"])
+@app.route("/modifica-prenotazione/<int:prenotazione_id>", methods=["GET", "POST"])
+def gestisci_prenotazione(prenotazione_id=None):
+    # Logica per prenotazione o modifica prenotazione
+    user_id = session.get("user_id")
+    today = datetime.now(timezone.utc).date()
+
+    if not user_id:
+        flash(Markup("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
+        return redirect(url_for("accedi"))
+
+    db_session = SessionLocal()
+    utente = db_session.query(Utente).filter_by(id=user_id).first()
+    orari_prenotabili = db_session.query(OrarioPrenotabile).all()
+
+    prenotazione = None
+    if prenotazione_id:
+        # Ricerca prenotazione esistente
+        prenotazione = db_session.query(Prenotazione).filter_by(id=prenotazione_id, utente_id=user_id).first()
+        if not prenotazione:
+            flash("Prenotazione non trovata o non autorizzata.", "danger")
+            return redirect(url_for("le_mie_prenotazioni"))
+
+    if request.method == "POST":
+        data = request.form.get("data")
+        numero_persone = request.form.get("numero_persone")
+        orario_prenotabile = request.form.get("orario")
+
+        # Verifica campi obbligatori
+        if not data or not orario_prenotabile:
+            flash("Tutti i campi sono obbligatori.", "warning")
+            return redirect(request.url)
+
+        # Formatta e verifica data
+        try:
+            data_formattata = datetime.strptime(data, '%Y-%m-%d').date()
+        except ValueError:
+            flash("La data inserita non è valida.", "danger")
+            return redirect(request.url)
+
+        # Converti orario
+        try:
+            orario_prenotabile_id = int(orario_prenotabile)
+        except ValueError:
+            flash("Seleziona un orario valido.", "danger")
+            return redirect(request.url)
+
+        # Se è una nuova prenotazione o l'orario è stato modificato
+        prenotazione_orario_prenotabile_id = getattr(prenotazione, "orario_prenotabile_id", None)
+        if prenotazione is None or prenotazione_orario_prenotabile_id != orario_prenotabile_id:
+            tavoli_non_prenotati = (
+                db_session.query(Tavolo)
+                .outerjoin(Prenotazione, and_(
+                    Prenotazione.tavolo_id == Tavolo.id,
+                    Prenotazione.data == data_formattata,
+                    Prenotazione.orario_prenotabile_id == orario_prenotabile_id
+                ))
+                .filter(Prenotazione.id == None)
+                .all()
+            )
+            if tavoli_non_prenotati:
+                tavolo_id = random.choice(tavoli_non_prenotati).id
+            else:
+                flash("Nessun tavolo disponibile per la data e l'orario selezionati.", "warning")
+                return redirect(request.url)
+
+        try:
+            # Creazione o aggiornamento prenotazione
+            if prenotazione:
+                setattr(prenotazione, 'data', data_formattata)
+                setattr(prenotazione, 'numero_persone', numero_persone)
+                setattr(prenotazione, 'orario_prenotabile_id', orario_prenotabile_id)
+                setattr(prenotazione, 'tavolo_id', tavolo_id)
+                flash("La prenotazione è stata modificata.", "success")
+            else:
+                nuova_prenotazione = Prenotazione(
+                    data=data_formattata,
+                    numero_persone=numero_persone,
+                    utente_id=user_id,
+                    tavolo_id=tavolo_id,
+                    orario_prenotabile_id=orario_prenotabile_id
+                )
+                db_session.add(nuova_prenotazione)        
+                flash("La prenotazione è stata accettata.", "success")
+
+            db_session.commit()
+            return redirect(url_for("le_mie_prenotazioni"))
+
+        except Exception as e:
+            db_session.rollback()
+            flash(f"Errore durante la prenotazione: {e}", "danger")
+
+    db_session.close()
+    return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=today, prenotazione=prenotazione)    
 
 # Chi siamo
 @app.route("/chi-siamo")
@@ -228,6 +324,7 @@ def le_mie_prenotazioni():
         db_session.close()
     
     return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni, datetime = datetime)
+
 
 # Modifica profilo
 @app.route("/modifica-profilo", methods=["GET", "POST"])

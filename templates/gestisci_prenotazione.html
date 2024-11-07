@@ -7,7 +7,7 @@
             <!-- Colonna sinistra con sfondo e testo -->
             <div class="col-md-6 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
                 <i class="bi bi-journal-bookmark fs-1"></i>
-                <h1 class="mb-3">Prenota un tavolo</h1>
+                <h1 class="mb-3">{% if not prenotazione %}Prenota un tavolo{% else %}Modifica prenotazione{% endif %}</h1>
                 <p>Compila il form per assicurarti un posto al Pegasus Gourmet Experience.</p>
             </div>
             
@@ -51,13 +51,13 @@
 
                     <!-- Numero persone -->
                     <div class="form-floating my-3">
-                        <input type="number" class="form-control" name="numero_persone" id="numero_persone" value="2" min="1" max="30" required>
+                        <input type="number" class="form-control" name="numero_persone" id="numero_persone" min="1" max="30"  value="{{ prenotazione.numero_persone if prenotazione else '2' }}" required>
                         <label for="numero_persone">Quante persone siete?</label>
                     </div>
 
                     <!-- Data -->
                     <div class="form-floating my-3">
-                        <input type="date" class="form-control" name="data" id="data" min="{{ today }}" required>
+                        <input type="date" class="form-control" name="data" id="data" min="{{ today }}" value="{{ prenotazione.data if prenotazione else '' }}" required>
                         <label for="data">Per quale giorno vuoi prenotare il tuo tavolo?</label>
                     </div>
 
@@ -69,20 +69,23 @@
                     </div>
                     
                     <!-- Orario -->
-                    <div class="form-group my-3 border rounded floating-btn-check sez-orari d-none">
+                    <div class="form-group my-3 border rounded floating-btn-check sez-orari {% if not prenotazione %}d-none{% endif %}">
                         <label class="form-label d-block floating-label">Scegli orario</label>
                         <div class="d-flex flex-wrap gap-2 justify-content-start">
                             {% for orario in orari %}
-                                <input type="radio" class="btn-check input-orario" name="orario" id="orario-{{orario.id}}" value="{{orario.id}}" autocomplete="off">
-                                <label class="btn btn-outline-primary label-orario" data-orario-id="{{orario.id}}" for="orario-{{orario.id}}">{{ orario.orario.strftime('%H:%M') }}</label>
+                                <input type="radio" class="btn-check input-orario" name="orario" id="orario-{{orario.id}}" value="{{orario.id}}" autocomplete="off"
+                                    {% if prenotazione and prenotazione.orario_prenotabile_id == orario.id %}checked{% endif %}>
+                                <label class="btn btn-outline-primary label-orario" data-orario-id="{{orario.id}}" for="orario-{{orario.id}}">
+                                    {{ orario.orario.strftime('%H:%M') }}
+                                </label>
                             {% endfor %}
                         </div>
                     </div> 
 
-                    <div class="mb-3 row riga-pulsante-prenota d-none">
+                    <div class="mb-3 row riga-pulsante-prenota {% if not prenotazione %}d-none{% endif %}">
                         <div class="d-flex justify-content-center">
                             <button type="submit" class="btn btn-primary">
-                                Prenota
+                                {% if not prenotazione %}Prenota{% else %}Applica modifiche{% endif %}
                             </button>
                         </div>
                     </div>
