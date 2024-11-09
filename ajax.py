@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, session
 from database import SessionLocal
-from models import OrarioPrenotabile, Prenotazione
+from models import OrarioPrenotabile, Prenotazione, Tavolo
 from datetime import datetime
 
 ajax = Blueprint("ajax", __name__)
@@ -10,10 +10,30 @@ def orari_disponibili():
     data_selezionata = request.json.get("data") # type: ignore
     db_session = SessionLocal()
 
+    # Ottieni il numero totale di tavoli
+    totale_tavoli = db_session.query(func.count(Tavolo.id)).scalar()
+
+    # Ottieni gli orari prenotati e il conteggio delle prenotazioni per la data selezionata
+    orari_conteggio = (
+        db_session.query(Prenotazione.orario_prenotabile_id, func.count(Prenotazione.id).label("conteggio"))
+        .filter(Prenotazione.data == data_selezionata)
+        .group_by(Prenotazione.orario_prenotabile_id)
+        .all()
+    )
+
+    # Identifica gli orari da escludere (quelli con un conteggio >= totale_tavoli)
+    orari_esclusi = [
+        orario[0] for orario in orari_conteggio if orario.conteggio >= totale_tavoli
+    ]
+
+    # Ottieni solo gli orari non esclusi
+    orari_disponibili = db_session.query(OrarioPrenotabile).filter(~OrarioPrenotabile.id.in_(orari_esclusi)).all()
+
+
     # Ottieni orari disponibili
-    orari_prenotati = db_session.query(Prenotazione.orario_prenotabile_id).filter_by(data=data_selezionata).all()
-    orari_prenotati_ids = [orario[0] for orario in orari_prenotati]
-    orari_disponibili = db_session.query(OrarioPrenotabile).filter(~OrarioPrenotabile.id.in_(orari_prenotati_ids)).all()
+    #orari_prenotati = db_session.query(Prenotazione.orario_prenotabile_id).filter_by(data=data_selezionata).all()
+    #orari_prenotati_ids = [orario[0] for orario in orari_prenotati]
+    #orari_disponibili = db_session.query(OrarioPrenotabile).filter(~OrarioPrenotabile.id.in_(orari_prenotati_ids)).all()
 
     db_session.close()
 
@@ -63,3 +83,6 @@ def verifica_data_prenotazione():
         return jsonify({"error": str(e)}), 500
     finally:
         db_session.close()
+
+
+from sqlalchemy import func

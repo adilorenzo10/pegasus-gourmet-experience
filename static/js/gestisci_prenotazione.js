@@ -1,8 +1,26 @@
+var idPrenotazione = $("form#prenotazione").data("id");
+var boolModifica = (idPrenotazione != 0);
+var dataPreselezionataInModifica = boolModifica ? $("#data").val() : '';
+var idOrarioPreselezionatoInModifica = boolModifica ? $("input[name=orario]:checked").val() : '';
+
+// Eseguo la prima volta il caricamento degli orari corretti
+if (boolModifica){
+    caricaOrariDisponibili(dataPreselezionataInModifica);
+}
+
+
 // Inizializza l'evento sul cambiamento della data
 $("#data").on("change", function() {
     $(".sez-orari, .riga-pulsante-prenota, .errore-nessun-orario").addClass("d-none");
     var dataSelezionata = $(this).val();
-    verificaPrenotazione(dataSelezionata);
+
+    // Controllo se sono in modifica e se la data è quella precedentemente salvata
+    if (boolModifica && dataSelezionata == dataPreselezionataInModifica){
+        caricaOrariDisponibili(dataSelezionata);
+    }else{
+        verificaPrenotazione(dataSelezionata);
+    }
+   
 });
 
 // Verifica se l'utente ha già una prenotazione per la data selezionata
@@ -13,6 +31,7 @@ function verificaPrenotazione(dataSelezionata) {
         contentType: "application/json",
         data: JSON.stringify({ "data": dataSelezionata }),
         success: function(response) {
+            console.log(response);
             if (response.prenotazione_esiste) {
                 // Se esiste già una prenotazione, mostra il messaggio specifico
                 $(".errore-nessun-orario .alert").text("Non sono disponibili orari perché hai già prenotato un tavolo nella data selezionata. È possibile prenotare un solo tavolo al giorno.");
@@ -39,6 +58,9 @@ function caricaOrariDisponibili(dataSelezionata) {
         success: function(response) {
             console.log(response);
             mostraOrariDisponibili(response, dataSelezionata);
+            if (boolModifica){
+                mostraOrario(idOrarioPreselezionatoInModifica);
+            }
         },
         error: function(error) {
             console.log("Errore durante il recupero degli orari disponibili.");

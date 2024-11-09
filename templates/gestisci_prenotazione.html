@@ -13,7 +13,7 @@
             
             <!-- Colonna destra con form -->
             <div class="col-md-6 d-flex flex-column justify-content-center p-5">
-                <form method="POST">
+                <form id="prenotazione" method="POST" data-id="{{ prenotazione.id if prenotazione else '0' }}">
                     <div class="errors mb-3">
                         {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
