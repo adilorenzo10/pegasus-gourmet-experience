@@ -1,4 +1,4 @@
-import sqlite3, secrets, random, pytz, logging
+import sqlite3, secrets, random, pytz, logging, os
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_assets import Environment, Bundle
 from markupsafe import Markup
@@ -12,11 +12,15 @@ from ajax import ajax
 from passlib.context import CryptContext
 from passlib import pwd
 from decorators import with_db_session, login_required
+from dotenv import load_dotenv
 
 
 app = Flask(__name__)
 app.register_blueprint(ajax, url_prefix="/ajax")
-app.secret_key = secrets.token_hex(16)
+
+# Carica le variabili dal file .env
+load_dotenv()  
+app.secret_key = os.getenv("SECRET_KEY", secrets.token_hex(16))
 
 # Configura Flask-Assets
 assets = Environment(app)
@@ -116,14 +120,11 @@ def registrati(db_session):
 @app.route("/prenota", methods=["GET", "POST"])
 @app.route("/modifica-prenotazione/<int:prenotazione_id>", methods=["GET", "POST"])
 @with_db_session
+@login_required("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!")
 def gestisci_prenotazione(db_session, prenotazione_id=None):
     titolo_pagina = "Prenotazione"
     user_id = session.get("user_id")
-    today = datetime.now(timezone.utc).date()
-
-    if not user_id:
-        flash(Markup("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
-        return redirect(url_for("accedi"))
+    data_corrente = datetime.now(pytz.timezone('Europe/Rome')).date()
 
     utente = db_session.query(Utente).filter_by(id=user_id).first()
     orari_prenotabili = db_session.query(OrarioPrenotabile).all()
@@ -208,7 +209,7 @@ def gestisci_prenotazione(db_session, prenotazione_id=None):
             logger.error(f"Errore durante la prenotazione: {e}")
 
 
-    return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=today, prenotazione=prenotazione, titolo=titolo_pagina)
+    return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=data_corrente, prenotazione=prenotazione, titolo=titolo_pagina)
 
 # Il mio account
 @app.route("/il-mio-account")
@@ -219,15 +220,11 @@ def il_mio_account():
 # Le mie prenotazioni
 @app.route("/le-mie-prenotazioni")
 @with_db_session
+@login_required("Per favore accedi per visualizzare le tue prenotazioni. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!")
 def le_mie_prenotazioni(db_session):
     titolo_pagina = "Le mie prenotazioni"
     user_id = session.get("user_id")
     data_corrente = datetime.now(pytz.timezone('Europe/Rome'))
-
-    # Se l'utente non è loggato, reindirizza alla pagina di accesso
-    if not user_id:
-        flash(Markup("Per favore accedi per visualizzare le tue prenotazioni. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
-        return redirect(url_for("accedi"))
 
     # Crea una sessione con il database e recupera i dati utente
     try:
@@ -252,14 +249,10 @@ def le_mie_prenotazioni(db_session):
 # Modifica profilo
 @app.route("/modifica-profilo", methods=["GET", "POST"])
 @with_db_session
+@login_required("Sei stato disconnesso, per favore, effettua di nuovo l'accesso.")
 def modifica_profilo(db_session):
     titolo_pagina = "Modifica profilo"
     user_id = session.get("user_id")
-
-    if not user_id:
-        flash(Markup("Sei stato disconnesso, per favore, effettua di nuovo l'accesso."), "warning")
-        return redirect(url_for("accedi"))
-
     utente = db_session.query(Utente).filter_by(id=user_id).first()
 
     if not utente:
@@ -312,9 +305,15 @@ def logout():
 # Gestione errore 404
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template("404.html"), 404
+    titolo_pagina="Errore 404 - Pagina non trovata"
+    return render_template("404.html", titolo=titolo_pagina), 404
 
 # Filtro data formattata
 @app.template_filter("data_formattata")
 def data_formattata(data):
     return format_date(data, "EE dd MMM YYYY", locale="it_IT")
+
+# Titolo default per ogni template
+@app.context_processor
+def inject_default_title():
+    return dict(titolo_default="Pegasus Gourmet Experience")

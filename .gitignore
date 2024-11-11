@@ -1,6 +1,7 @@
 # Ignora l'ambiente virtuale
 .venv/
 env/
+.env
 
 # Ignora le impostazioni di VS Code
 .vscode/
