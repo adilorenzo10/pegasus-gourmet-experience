@@ -1,16 +1,17 @@
-import random
+import sqlite3, secrets, random, pytz, logging
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_assets import Environment, Bundle
 from markupsafe import Markup
-import pytz
-from sqlalchemy import and_, desc 
+from sqlalchemy import and_, desc
+from sqlalchemy.orm import joinedload
 from database import SessionLocal
 from models import Utente, Tavolo, Prenotazione, OrarioPrenotabile
 from datetime import date, datetime, time, timezone
-from ajax import ajax
-import sqlite3, secrets
-from sqlalchemy.orm import joinedload
 from babel.dates import format_date
+from ajax import ajax
+from passlib.context import CryptContext
+from passlib import pwd
+from decorators import with_db_session, login_required
 
 
 app = Flask(__name__)
@@ -25,75 +26,98 @@ scss = Bundle('scss/style.scss', filters='libsass', output='css/style.css')
 assets.register('scss_all', scss)
 scss.build() # Solo in fase di sviluppo
 
+# Configuro il log
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
 # Homepage
 @app.route("/")
-def index():
-    return render_template("index.html")
+@with_db_session
+def index(db_session):
+    user_id = session.get("user_id")
+    
+    utente = None
+    if user_id:
+        utente = db_session.query(Utente).filter_by(id=user_id).first()
+    
+    return render_template("index.html", utente=utente)
 
 # Accedi
 @app.route("/accedi", methods=["GET", "POST"])
-def accedi():
+@with_db_session
+def accedi(db_session):
+    titolo_pagina = "Accedi"
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
-        
-        db_session = SessionLocal()
-        
+                
         # Cerca l'utente nel database
         utente = db_session.query(Utente).filter_by(email=email).first()
         if utente and utente.check_password(password):
             session["user_id"] = utente.id
-            #flash("Login effettuato con successo!", "success")
             return redirect(url_for("index"))
         else:
             flash("Email o password non corretti. Riprova.", "danger")
-        
-        # Chiudi la sessione del database
-        db_session.close()
 
-    return render_template("accedi.html")
+    return render_template("accedi.html", titolo=titolo_pagina)
 
 # Registrati
 @app.route("/registrati", methods=["GET", "POST"])
-def registrati():
+@with_db_session
+def registrati(db_session):
+    titolo_pagina = "Registrati"
+    
     if request.method == "POST":
+        # Ottieni i dati dal form
         nome_ottenuto = request.form.get("nome")
         cognome_ottenuto = request.form.get("cognome")
         email_ottenuta = request.form.get("email")
         password_ottenuta = request.form.get("password")
 
-
         # Verifica se i campi obbligatori sono vuoti
         if not all([nome_ottenuto, cognome_ottenuto, email_ottenuta, password_ottenuta]):
             flash("Tutti i campi sono obbligatori.", "warning")
             return redirect(url_for("registrati"))
-        
-        
-        # Cerca l'utente nel database
-        db_session = SessionLocal()
+
+        # Controlla se l'utente esiste già
         utente = db_session.query(Utente).filter_by(email=email_ottenuta).first()
-        if not utente:
-                try:
-                    nuovo_utente = Utente(nome=nome_ottenuto, cognome=cognome_ottenuto, email=email_ottenuta)
-                    nuovo_utente.set_password(password_ottenuta)
-                    db_session.add(nuovo_utente)        
-                    db_session.commit()
-                    flash("La registrazione è stata completata con successo, adesso puoi accedere al sito per effettuare una prenotazione.", "success")
-                    return redirect(url_for("accedi"))
-                except Exception as e:
-                    db_session.rollback()
-                    flash(f"Errore durante la registrazione: {e}", "danger")
-                finally:
-                    db_session.close()
-        else:
-            flash("L'email inserita è già stata utilizzata. Riprova con un'altra oppure effettua l'accesso.", "danger")
-                
-    return render_template("registrati.html")
+        if utente:
+            flash("L'email è già in uso. Prova con un'altra o effettua l'accesso.", "danger")
+            return redirect(url_for("registrati"))
+        
+        # Creazione nuovo utente
+        try:
+            nuovo_utente = Utente(
+                nome=nome_ottenuto,
+                cognome=cognome_ottenuto,
+                email=email_ottenuta
+            )
+            nuovo_utente.set_password(password_ottenuta)  # Usa `set_password` per hashing e verifica robustezza
+            db_session.add(nuovo_utente)
+            db_session.commit()
+            flash("La registrazione è stata completata con successo.", "success")
+            return redirect(url_for("accedi"))
+
+        except ValueError as e:
+            flash(str(e), "danger")
+            logger.error(f"Errore durante la creazione utente: {e}")
+            return redirect(url_for("registrati"))
+            
+        except Exception as e:
+            db_session.rollback()
+            flash("Errore durante la registrazione", "danger")
+            logger.error(f"Eccezione durante la registrazione: {e}")
+            return redirect(url_for("registrati"))
+
+    return render_template("registrati.html", titolo=titolo_pagina)
 
 # Prenota o modifica un tavolo
 @app.route("/prenota", methods=["GET", "POST"])
 @app.route("/modifica-prenotazione/<int:prenotazione_id>", methods=["GET", "POST"])
-def gestisci_prenotazione(prenotazione_id=None):
+@with_db_session
+def gestisci_prenotazione(db_session, prenotazione_id=None):
+    titolo_pagina = "Prenotazione"
     user_id = session.get("user_id")
     today = datetime.now(timezone.utc).date()
 
@@ -101,7 +125,6 @@ def gestisci_prenotazione(prenotazione_id=None):
         flash(Markup("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!"), "warning")
         return redirect(url_for("accedi"))
 
-    db_session = SessionLocal()
     utente = db_session.query(Utente).filter_by(id=user_id).first()
     orari_prenotabili = db_session.query(OrarioPrenotabile).all()
 
@@ -126,7 +149,7 @@ def gestisci_prenotazione(prenotazione_id=None):
         # Formatta e verifica data
         try:
             data_formattata = datetime.strptime(data, '%Y-%m-%d').date()
-        except ValueError:
+        except ValueError as e:
             flash("La data inserita non è valida.", "danger")
             return redirect(request.url)
 
@@ -181,25 +204,23 @@ def gestisci_prenotazione(prenotazione_id=None):
 
         except Exception as e:
             db_session.rollback()
-            flash(f"Errore durante la prenotazione: {e}", "danger")
+            flash(f"Errore durante la prenotazione", "danger")
+            logger.error(f"Errore durante la prenotazione: {e}")
 
-        finally:
-            db_session.close()
-    return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=today, prenotazione=prenotazione)    
 
-# Chi siamo
-@app.route("/chi-siamo")
-def chi_siamo():
-    return render_template("chi_siamo.html")
+    return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=today, prenotazione=prenotazione, titolo=titolo_pagina)
 
 # Il mio account
 @app.route("/il-mio-account")
 def il_mio_account():
-    return render_template("il_mio_account.html")
+    titolo_pagina = "Il mio account"
+    return render_template("il_mio_account.html", titolo=titolo_pagina)
 
 # Le mie prenotazioni
 @app.route("/le-mie-prenotazioni")
-def le_mie_prenotazioni():
+@with_db_session
+def le_mie_prenotazioni(db_session):
+    titolo_pagina = "Le mie prenotazioni"
     user_id = session.get("user_id")
     data_corrente = datetime.now(pytz.timezone('Europe/Rome'))
 
@@ -209,7 +230,6 @@ def le_mie_prenotazioni():
         return redirect(url_for("accedi"))
 
     # Crea una sessione con il database e recupera i dati utente
-    db_session = SessionLocal()
     try:
         mie_prenotazioni = (
             db_session.query(Prenotazione)
@@ -226,23 +246,20 @@ def le_mie_prenotazioni():
     except ValueError:
         flash("Seleziona un orario valido.", "danger")
         return redirect(url_for("prenota"))
-    finally:
-        db_session.close()
     
-    return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni, data_corrente = data_corrente)
+    return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni, data_corrente = data_corrente, titolo=titolo_pagina)
 
 # Modifica profilo
 @app.route("/modifica-profilo", methods=["GET", "POST"])
-def modifica_profilo():
+@with_db_session
+def modifica_profilo(db_session):
+    titolo_pagina = "Modifica profilo"
     user_id = session.get("user_id")
 
-    # Se l'utente non è loggato, reindirizza alla pagina di accesso
     if not user_id:
-        flash(Markup("Sei stato disconnesso, per favore, effettua di nuovo l'accesso. Se non hai un account, <a href='/registrati'>registrati</a> subito!"), "warning")
+        flash(Markup("Sei stato disconnesso, per favore, effettua di nuovo l'accesso."), "warning")
         return redirect(url_for("accedi"))
 
-    # Crea una sessione con il database e recupera i dati utente
-    db_session = SessionLocal()
     utente = db_session.query(Utente).filter_by(id=user_id).first()
 
     if not utente:
@@ -250,43 +267,40 @@ def modifica_profilo():
         return redirect(url_for("index"))
     
     if request.method == "POST":
-        # Recupera i dati dal form
         nome = request.form.get("nome")
         cognome = request.form.get("cognome")
         email = request.form.get("email")
-
-        # Aggiorna i dati utente
+        
         setattr(utente, 'nome', nome)
         setattr(utente, 'cognome', cognome)
         setattr(utente, 'email', email)
 
-        # Se l'utente desidera cambiare la password
         if request.form.get("password-attuale") and request.form.get("password"):
             password_attuale = request.form.get("password-attuale")
             nuova_password = request.form.get("password")
 
-            # Verifica la password attuale
             if not utente.check_password(password_attuale):
                 flash("La password attuale è errata.", "danger")
                 return redirect(url_for("modifica_profilo"))
 
-            # Imposta la nuova password
-            utente.set_password(nuova_password)
+            try:
+                utente.set_password(nuova_password)
+            except ValueError as e:
+                flash(str(e), "danger")
+                return redirect(url_for("modifica_profilo"))
 
-        # Salva le modifiche nel database
         try:
             db_session.commit()
             flash("Il profilo è stato aggiornato con successo.", "success")
         except Exception as e:
             db_session.rollback()
-            flash(f"Errore durante l'aggiornamento del profilo: {e}", "danger")
-        finally:
-            db_session.close()
+            flash("Errore durante l'aggiornamento del profilo.", "danger")
+            logger.error(f"Eccezione generata durante l'aggiornamento del profilo: {e}")
+
 
         return redirect(url_for("modifica_profilo"))
 
-    # GET: Mostra il form di modifica profilo con i dati utente
-    return render_template("modifica_profilo.html", utente=utente)
+    return render_template("modifica_profilo.html", utente=utente, titolo=titolo_pagina)
 
 # Logout
 @app.route("/logout")
@@ -294,6 +308,11 @@ def logout():
     session.pop("user_id", None)
     flash("Logout effettuato con successo!", "success")
     return redirect(url_for("accedi"))
+
+# Gestione errore 404
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
 
 # Filtro data formattata
 @app.template_filter("data_formattata")

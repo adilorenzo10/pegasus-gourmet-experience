@@ -37,23 +37,23 @@
                             <div class="list-group-item list-group-item-action prenotazione" data-id="{{ prenotazione.id }}">
                                 <div class="d-flex w-100 justify-content-between">
                                     <!-- Informazioni sulla prenotazione -->
-                                    <div>
-                                        <h6 class="mb-1">
+                                    <div class="d-flex flex-column justify-content-between">
+                                        <span class="elemento-prenotazione">
                                             <i class="bi bi-calendar3"></i>
                                             {{ prenotazione.data|data_formattata }}
-                                        </h6>
-                                        <h6 class="mb-1">
+                                        </span>
+                                        <span class="elemento-prenotazione">
                                             <i class="bi bi-clock"></i>
                                             {{ prenotazione.orario.orario.strftime("%H:%M") }}
-                                        </h6>
-                                        <h6 class="mb-1">
+                                        </span>
+                                        <span class="elemento-prenotazione">
                                             <i class="bi bi-people-fill"></i>
                                             {{ prenotazione.numero_persone }}
-                                        </h6>
-                                        <h6 class="mb-1">
+                                        </span>
+                                        <span class="elemento-prenotazione">
                                             <i class="bi bi-hash"></i>
                                             Tavolo {{ prenotazione.tavolo.numero }}
-                                        </h6>
+                                        </span>
                                     </div>
                                     
                                     <!-- Stato della prenotazione e pulsanti azione -->
@@ -62,10 +62,12 @@
                                         {% set current_date = data_corrente.date() %}
                                         {% set current_time = data_corrente.time() %}
                                         {% if prenotazione.data > current_date or (prenotazione.data == current_date and prenotazione.orario.orario > current_time) %}
-                                            <form action="{{ url_for('gestisci_prenotazione', prenotazione_id=prenotazione.id) }}" method="get" style="display:inline;">
-                                                <button type="submit" class="btn btn-primary btn-sm mt-2">Modifica</button>
-                                            </form>
-                                            <button class="btn btn-danger btn-sm mt-2 cancella-prenotazione" data-id_prenotazione="{{ prenotazione.id }}">Cancella</button>
+                                            <div class="d-flex flex-column flex-md-row gap-2 mt-2">
+                                                <form action="{{ url_for('gestisci_prenotazione', prenotazione_id=prenotazione.id) }}" method="get">
+                                                    <button type="submit" class="btn btn-primary btn-sm p-1 w-100">Modifica</button>
+                                                </form>
+                                                <button class="btn btn-danger btn-sm cancella-prenotazione p-1 w-100" data-id_prenotazione="{{ prenotazione.id }}">Cancella</button>
+                                            </div>
                                         {% endif %}
                                     </div>
                                 </div>

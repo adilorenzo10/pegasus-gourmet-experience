@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
+                <i class="bi bi-exclamation-triangle fs-1"></i>
+                <h1 class="mb-3">Pagina non trovata (404)</h1>
+                <p>Spiacenti, la pagina che stai cercando non esiste o è stata spostata.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-dark mt-3">Torna alla Home</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center p-5">
+                <p>Se hai digitato l'indirizzo manualmente, verifica che sia corretto. In caso contrario, contattaci per assistenza.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

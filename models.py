@@ -1,7 +1,11 @@
-import bcrypt
+import re
+from passlib.context import CryptContext
 from sqlalchemy import Column, Date, Integer, String, ForeignKey, Time
 from sqlalchemy.orm import relationship
 from database import Base
+
+# Crea un contesto di hashing usando passlib
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class Utente(Base):
     __tablename__ = 'utenti'
@@ -14,20 +18,31 @@ class Utente(Base):
     prenotazioni = relationship("Prenotazione", back_populates="utente")
 
     def set_password(self, password):
-        salt = bcrypt.gensalt()
-        self.password_hash = bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
+        if not self.is_password_strong(password):
+            raise ValueError("La password non è abbastanza robusta. Inserisci almeno 8 caratteri, una lettera maiuscola ed un numero")
+        self.password_hash = pwd_context.hash(password)
 
     def check_password(self, password):
-        return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
-
-
+        password_hash = getattr(self, 'password_hash')
+        return pwd_context.verify(password, password_hash)
+    
+    @staticmethod
+    def is_password_strong(password):
+        # Verifica lunghezza e requisiti della password
+        if len(password) < 8:
+            return False
+        if not re.search(r"[A-Z]", password):  # Almeno una lettera maiuscola
+            return False
+        if not re.search(r"[0-9]", password):  # Almeno un numero
+            return False
+        return True
+    
 class Tavolo(Base):
     __tablename__ = 'tavoli'
     id = Column(Integer, primary_key=True, autoincrement=True)
     numero = Column(Integer, nullable=False)
 
     prenotazioni = relationship("Prenotazione", back_populates="tavolo")
-
 
 class Prenotazione(Base):
     __tablename__ = 'prenotazioni'
