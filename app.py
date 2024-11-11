@@ -211,12 +211,6 @@ def gestisci_prenotazione(db_session, prenotazione_id=None):
 
     return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=data_corrente, prenotazione=prenotazione, titolo=titolo_pagina)
 
-# Il mio account
-@app.route("/il-mio-account")
-def il_mio_account():
-    titolo_pagina = "Il mio account"
-    return render_template("il_mio_account.html", titolo=titolo_pagina)
-
 # Le mie prenotazioni
 @app.route("/le-mie-prenotazioni")
 @with_db_session
@@ -289,7 +283,6 @@ def modifica_profilo(db_session):
             db_session.rollback()
             flash("Errore durante l'aggiornamento del profilo.", "danger")
             logger.error(f"Eccezione generata durante l'aggiornamento del profilo: {e}")
-
 
         return redirect(url_for("modifica_profilo"))
 

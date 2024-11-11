@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+    <div id="carousel-intro" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#carousel-intro" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carousel-intro" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carousel-intro" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -35,13 +35,222 @@
                 </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel-intro" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel-intro" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-flex flex-column justify-content-center align-items-center bg-primary text-center p-5">
+                <i class="bi bi-book fs-1"></i>
+                <h1 class="mb-3">Il nostro menù</h1>
+                <p>Ti presentiamo il nostro menù, una selezione di piatti pensati per offrirti un'esperienza culinaria italiana unica.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="il-nostro-menu" class="container text-center py-5">
+        <div class="row mb-5">
+            <!-- Antipasti -->
+            <div class="col-md-6">
+                <h4 class="text-uppercase mb-3">Antipasti</h4>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Bruschetta al Pomodoro</span>
+                        <span>€5.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Caprese con Mozzarella di Bufala</span>
+                        <span>€8.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Carpaccio di Manzo</span>
+                        <span>€12.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Insalata di Mare</span>
+                        <span>€11.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Polpettine di Melanzane</span>
+                        <span>€6.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Tagliere di Salumi e Formaggi</span>
+                        <span>€14.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Primi -->
+            <div class="col-md-6">
+                <h4 class="text-uppercase mb-3">Primi</h4>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Pasta e patate con provola</span>
+                        <span>€10.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Spaghetti alla Carbonara</span>
+                        <span>€12.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Risotto ai Funghi Porcini</span>
+                        <span>€14.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Gnocchi al Pesto</span>
+                        <span>€11.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Penne all'Arrabbiata</span>
+                        <span>€9.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Tagliatelle al Ragù</span>
+                        <span>€13.50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Seconda riga: Secondi e Contorni -->
+        <div class="row mb-5">
+            <!-- Secondi -->
+            <div class="col-md-6">
+                <h4 class="text-uppercase mb-3">Secondi</h4>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Filetto di Manzo al Pepe Verde</span>
+                        <span>€18.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Salmone alla Griglia</span>
+                        <span>€16.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Pollo alla Cacciatora</span>
+                        <span>€13.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Fritto Misto di Pesce</span>
+                        <span>€15.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Scaloppine al Limone</span>
+                        <span>€14.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Involtini di Melanzane</span>
+                        <span>€12.50</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contorni -->
+            <div class="col-md-6">
+                <h4 class="text-uppercase mb-3">Contorni</h4>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Patate al Forno</span>
+                        <span>€4.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Verdure Grigliate</span>
+                        <span>€4.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Insalata Mista</span>
+                        <span>€3.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Spinaci Saltati</span>
+                        <span>€5.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Zucchine alla Griglia</span>
+                        <span>€4.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Carote al Vapore</span>
+                        <span>€3.50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Terza riga: Desserts e Drinks -->
+        <div class="row mb-5">
+            <!-- Desserts -->
+            <div class="col-md-6">
+                <h4 class="text-uppercase mb-3">Desserts</h4>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Tiramisù</span>
+                        <span>€6.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Panna Cotta</span>
+                        <span>€5.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Crostata di Frutta</span>
+                        <span>€5.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Profiteroles</span>
+                        <span>€6.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Gelato Artigianale</span>
+                        <span>€4.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Cheesecake alla Fragola</span>
+                        <span>€5.50</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Drinks -->
+            <div class="col-md-6">
+                <h4 class="text-uppercase mb-3">Drinks</h4>
+                <div class="list-group">
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Acqua Naturale</span>
+                        <span>€2.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Bicchiere di Vino Rosso</span>
+                        <span>€4.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Bicchiere di Vino Bianco</span>
+                        <span>€4.50</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Birra alla Spina</span>
+                        <span>€5.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Cocktail della Casa</span>
+                        <span>€8.00</span>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between">
+                        <span>Caffè Espresso</span>
+                        <span>€1.50</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
 {% endblock %}

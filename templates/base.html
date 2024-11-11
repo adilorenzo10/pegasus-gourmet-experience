@@ -23,6 +23,11 @@
             rel="stylesheet" 
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
         />
+        <link 
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" 
+            rel="stylesheet"
+        />
+
     </head>
 
     <body class="d-flex flex-column min-vh-100">
@@ -31,49 +36,9 @@
                 <div class="container">
                     <!-- Logo del sito ancorato a sinistra -->
                     <a class="navbar-brand d-inline-flex align-items-center gap-2" href="{{ url_for('index') }}">
-                        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                            width="60px" height="60px" viewBox="0 0 577.000000 569.000000"
-                            preserveAspectRatio="xMidYMid meet" class="logo-svg" aria-labelledby="logoTitle">
-                            
+                        <object data="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml" class="logo-header" style="width: 60px; height: 60px;">
                             <title id="logoTitle">Pegasus Gourmet Logo</title>
-                            <g transform="translate(0.000000,569.000000) scale(0.100000,-0.100000)" stroke="none">
-                                <path d="M2910 4214 c-36 -6 -145 -33 -215 -54 -230 -70 -462 -229 -610 -420
-                                -96 -123 -99 -133 -14 -48 119 118 243 208 384 278 211 104 375 143 595 142
-                                315 0 592 -101 834 -303 222 -186 362 -418 433 -719 23 -96 25 -399 4 -505
-                                -35 -177 -124 -378 -231 -520 -66 -88 -189 -217 -232 -243 -16 -9 -28 -19 -28
-                                -23 0 -4 -30 -26 -67 -50 -339 -214 -700 -269 -1092 -167 -64 16 -149 45 -190
-                                64 -88 40 -98 42 -49 9 119 -81 321 -159 483 -186 119 -20 354 -16 478 10 495
-                                100 886 450 1042 933 72 223 84 509 31 739 -123 532 -545 942 -1079 1049 -79
-                                16 -136 20 -276 19 -97 -1 -187 -3 -201 -5z"/>
-                                <path d="M271 3873 c84 -106 309 -270 515 -375 147 -76 383 -168 529 -208 107
-                                -30 202 -53 283 -69 51 -10 96 -22 99 -25 36 -36 -301 -33 -587 5 -244 32
-                                -683 129 -813 178 -16 6 -31 11 -35 11 -11 -1 68 -69 133 -115 55 -40 78 -53
-                                198 -118 50 -27 176 -77 267 -106 118 -37 191 -53 355 -81 88 -15 378 -40 468
-                                -40 83 0 96 -13 25 -24 -200 -33 -249 -37 -468 -37 -291 -1 -449 15 -764 76
-                                -43 9 -80 14 -83 12 -6 -7 87 -80 157 -123 180 -111 390 -179 666 -215 58 -7
-                                187 -10 357 -7 286 4 323 -3 194 -35 -247 -62 -575 -115 -826 -133 -51 -3
-                                -105 -9 -119 -13 l-27 -7 30 -11 c115 -43 151 -54 216 -67 85 -18 277 -34 347
-                                -30 190 11 245 15 302 25 95 15 170 29 210 39 73 17 120 22 120 11 0 -22 -182
-                                -89 -375 -139 -104 -27 -227 -49 -410 -75 l-90 -13 85 -27 c47 -14 109 -31
-                                138 -37 69 -13 352 -13 428 0 94 17 165 32 224 47 30 8 69 18 85 23 17 4 57
-                                17 89 29 33 11 62 19 64 16 12 -11 -28 -38 -131 -89 -186 -91 -310 -126 -577
-                                -165 l-55 -8 49 -22 c110 -49 192 -64 346 -64 116 0 162 4 230 21 126 33 226
-                                73 353 143 58 32 81 33 56 3 -46 -56 -243 -173 -389 -231 -22 -9 -18 -11 41
-                                -22 195 -34 369 10 475 120 116 121 282 200 483 229 35 5 66 11 68 14 3 3 -11
-                                24 -32 47 -76 84 -109 218 -86 344 12 63 65 185 108 247 l26 38 34 -30 c48
-                                -43 84 -55 203 -69 71 -9 113 -19 131 -32 41 -29 122 -204 144 -311 7 -37 47
-                                -75 92 -87 63 -18 78 -8 107 72 14 40 37 86 51 102 13 17 24 41 25 55 0 14
-                                -21 75 -46 135 -91 221 -113 293 -112 380 2 93 -12 142 -75 277 l-45 97 44 60
-                                c24 33 44 63 44 67 0 9 -81 -7 -138 -28 -29 -11 -56 -18 -58 -15 -3 3 1 18 8
-                                34 21 42 42 112 36 119 -13 12 -122 -53 -169 -100 -27 -27 -49 -52 -49 -56 0
-                                -4 -68 -5 -150 -2 -159 5 -249 -5 -375 -40 -205 -57 -386 -160 -544 -311 l-63
-                                -60 7 -91 c16 -221 84 -415 184 -526 22 -25 41 -48 41 -52 1 -22 -34 -1 -91
-                                57 -81 80 -121 159 -184 360 -101 323 -157 423 -292 516 -77 54 -129 70 -318
-                                99 -38 6 -88 15 -110 20 -108 25 -264 63 -300 75 -22 7 -87 27 -145 45 -58 17
-                                -136 43 -175 57 -38 13 -95 33 -125 43 -51 17 -292 108 -405 152 -27 11 -65
-                                26 -82 32 -18 7 -36 15 -39 19 -15 15 -26 6 -13 -10z"/>
-                            </g>
-                        </svg>
+                        </object>
                         <span class="d-none d-lg-block">Pegasus Gourmet Experience</span>
                     </a>
                     
@@ -94,7 +59,7 @@
                     <div class="collapse navbar-collapse" id="collapsibleNavId">
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                             <li class="nav-item">{{ macros.nav_link('index', 'Home') }}</li>
-                            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#menu">Il nostro menù</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#il-nostro-menu">Il nostro menù</a></li>
                             <li class="nav-item">{{ macros.nav_link('gestisci_prenotazione', 'Prenota un tavolo') }}</li>
                             
                             <!-- Verifica se l'utente è loggato -->
@@ -123,9 +88,38 @@
         </main>
 
         <!-- Footer -->
-        <footer class="bg-light text-center py-3 mt-auto">
-            <p>&copy; 2024 Pegasus Gourmet Experience</p>
+        <footer class="bg-primary text-center py-4 mt-auto">
+            <div class="container">
+                <!-- Logo e Copyright -->
+                <div class="mb-3">
+                    <object data="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml" class="logo-svg" style="width: 100px; height: 100px;">
+                        <title id="logoTitle">Pegasus Gourmet Logo</title>
+                    </object>                    
+                    <p class="mb-0">&copy; 2024 Pegasus Gourmet Experience</p>
+                </div>
+
+                <!-- Link Social -->
+                <div class="mb-3">
+                    <a href="https://www.instagram.com" target="_blank" class="text-white me-3 text-decoration-none" aria-label="Instagram">
+                        <span class="material-symbols-outlined fs-5">camera</span> <!-- Usa "camera" o "favorite" come preferisci -->
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" class="text-white me-3 text-decoration-none" aria-label="TikTok">
+                        <span class="material-symbols-outlined fs-5">videocam</span>
+                    </a>
+                    <a href="https://www.facebook.com" target="_blank" class="text-white text-decoration-none" aria-label="Facebook">
+                        <span class="material-symbols-outlined fs-5">thumb_up</span>
+                    </a>
+                </div>
+
+                <!-- Informazioni di contatto -->
+                <div class="mb-2">
+                    <p class="mb-0">Telefono: +39 012 345 6789</p>
+                    <p class="mb-0">Email: <a href="mailto:info@pegasusgourmet.com" class="text-dark">info@pegasusgourmet.com</a></p>
+                </div>
+
+            </div>
         </footer>
+
 
         <!-- Bootstrap JavaScript Libraries -->
         <script
