@@ -15,3 +15,74 @@ nav.navbar .navbar-brand .logo-svg {
 div.bg-primary{
     color: #000000;
 }
+
+i.logo {
+    -webkit-mask: var(--logo-url) no-repeat center;
+    mask: var(--logo-url) no-repeat center;
+    display: inline-block;
+    background-size: contain;
+}
+
+i.logo.header {
+    background-color: $primary;
+    height: 60px;
+    width: 60px;
+}
+
+i.logo.footer {
+    background-color: white;
+    height: 100px;
+    width: 100px;
+}
+
+.carousel-item img {
+    height: 600px;
+    object-fit: cover;
+    filter: brightness(0.2);
+}
+
+.floating-btn-check {
+    padding: 0.75rem;
+}
+
+.floating-btn-check label.floating-label {
+    font-size: 13.6px;
+    color: rgba(var(--bs-body-color-rgb), 0.65);
+}
+
+footer .testo-opaco *{
+    transition: opacity 0.4s ease;
+}
+
+footer .testo-opaco h4,
+footer .testo-opaco i{
+    opacity: 0.75;
+}
+
+footer .testo-opaco a,
+footer .testo-opaco p,
+footer .testo-opaco h5,
+footer .testo-opaco span {
+    opacity: 0.5;
+}
+
+footer .testo-opaco h4:hover,
+footer .testo-opaco h5:hover,
+footer .testo-opaco i:hover,
+footer .testo-opaco a:hover,
+footer .testo-opaco p:hover,
+footer .testo-opaco span:hover {
+    opacity: 1;
+}
+
+.font-great-vibes {
+    font-family: 'Great Vibes';
+}
+
+nav.navbar-transparent {
+    z-index: 999;
+}
+
+main.main-for-nav-trasparent{
+    margin-top: -87px;
+}

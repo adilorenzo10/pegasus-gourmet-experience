@@ -12,19 +12,21 @@
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
         <link
-        href="{{url_for('static', filename='css/style.css')}}"
-        rel="stylesheet"
-        />
-        <link
-            href="{{url_for('static', filename='css/custom_style.css')}}"
+            href="{{url_for('static', filename='css/style.css')}}"
             rel="stylesheet"
         />
         <link 
             rel="stylesheet" 
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
         />
+        <!-- Google Font per le icone Material Symbols -->
         <link 
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" 
+            rel="stylesheet"
+        />
+        <!-- Google Font Pinyon Script -->
+        <link 
+            href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Pinyon+Script&family=Allison&display=swap" 
             rel="stylesheet"
         />
 
@@ -32,14 +34,12 @@
 
     <body class="d-flex flex-column min-vh-100">
         <header>
-            <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <nav class="navbar navbar-expand-md {% if header_transparent %}navbar-dark navbar-transparent{% else %}navbar-light bg-light{% endif %}">
                 <div class="container">
                     <!-- Logo del sito ancorato a sinistra -->
                     <a class="navbar-brand d-inline-flex align-items-center gap-2" href="{{ url_for('index') }}">
-                        <object data="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml" class="logo-header" style="width: 60px; height: 60px;">
-                            <title id="logoTitle">Pegasus Gourmet Logo</title>
-                        </object>
-                        <span class="d-none d-lg-block">Pegasus Gourmet Experience</span>
+                        <i class="logo header"></i>
+                        <h4 class="titolo-logo d-none d-lg-block mb-0 mt-1 font-great-vibes">Pegasus Gourmet Experience</h4>
                     </a>
                     
                     <!-- Bottone per il menu su dispositivi piccoli -->
@@ -79,47 +79,65 @@
                     </div>
                 </div>
             </nav>
-            
         </header>
 
         <!-- Main -->
-        <main class="flex-grow-1">
+        <main class="flex-grow-1 {% if header_transparent %}main-for-nav-trasparent{% endif %}">
             {% block content %}{% endblock %}
         </main>
 
         <!-- Footer -->
-        <footer class="bg-primary text-center py-4 mt-auto">
-            <div class="container">
-                <!-- Logo e Copyright -->
-                <div class="mb-3">
-                    <object data="{{ url_for('static', filename='images/logo.svg') }}" type="image/svg+xml" class="logo-svg" style="width: 100px; height: 100px;">
-                        <title id="logoTitle">Pegasus Gourmet Logo</title>
-                    </object>                    
-                    <p class="mb-0">&copy; 2024 Pegasus Gourmet Experience</p>
+        <footer class="text-center">
+            <div class="container-fluid bg-dark text-light testo-opaco">
+                <div class="row p-4 pt-5 text-center">
+                    <!-- Logo e Copyright -->
+                    <div class="col-12 col-md-4 mb-4 mb-md-0">
+                        <i class="logo footer" role="button"></i>             
+                        <h5 class="mb-0 didascalia-logo-footer font-great-vibes">
+                            Dove l'arte culinaria incontra l'eleganza <br>per offrirvi un'esperienza di gusto indimenticabile.
+                        </h5>
+                        <h5 class="mb-0 dedica d-none font-great-vibes">
+                            Dedicato a mio nonno che teneva a cuore il mio percorso universitario. Questa è la nostra promessa!
+                        </h5>
+                    </div>
+        
+                    <!-- Colonna Spaziatrice Solo su Desktop -->
+                    <div class="d-none d-md-block col-md-2"></div>
+        
+                    <!-- Menu -->
+                    <div class="col-12 col-md-3 mb-4 mb-md-0 d-flex flex-column align-items-center align-items-md-start">
+                        <h4 class="mb-4 font-great-vibes">Menu</h4>
+                        <a class="text-light text-decoration-none" href="{{ url_for('index') }}">Home</a>
+                        <a class="text-light text-decoration-none" href="{{ url_for('index') }}#il-nostro-menu">Il nostro menù</a>
+                        <a class="text-light text-decoration-none" href="{{ url_for('gestisci_prenotazione') }}">Prenota</a>
+                        <a class="text-light text-decoration-none" href="{{ url_for('le_mie_prenotazioni') }}">Le mie prenotazioni</a>
+                    </div>
+        
+                    <!-- Link Social -->
+                    <div class="col-12 col-md-3 mb-4 mb-md-0 d-flex flex-column align-items-center align-items-md-start">
+                        <h4 class="mb-4 font-great-vibes">Contatti</h4>
+                        <div class="d-flex justify-content-center justify-content-md-start mb-3">
+                            <a href="https://www.instagram.com" target="_blank" class="text-light me-3 text-decoration-none" aria-label="Instagram">
+                                <span class="material-symbols-outlined fs-5">camera</span>
+                            </a>
+                            <a href="https://www.tiktok.com" target="_blank" class="text-light me-3 text-decoration-none" aria-label="TikTok">
+                                <span class="material-symbols-outlined fs-5">videocam</span>
+                            </a>
+                            <a href="https://www.facebook.com" target="_blank" class="text-light text-decoration-none" aria-label="Facebook">
+                                <span class="material-symbols-outlined fs-5">thumb_up</span>
+                            </a>
+                        </div>
+                        <span class="text-light">Telefono: <a href="tel:+39123456789" class="text-light">+39 123 456 789</a></span>
+                        <span class="text-light">Email: <a href="mailto:info@pegasusgourmet.com" class="text-light">info@pegasusgourmet.com</a></span>
+                    </div>                    
                 </div>
-
-                <!-- Link Social -->
-                <div class="mb-3">
-                    <a href="https://www.instagram.com" target="_blank" class="text-white me-3 text-decoration-none" aria-label="Instagram">
-                        <span class="material-symbols-outlined fs-5">camera</span> <!-- Usa "camera" o "favorite" come preferisci -->
-                    </a>
-                    <a href="https://www.tiktok.com" target="_blank" class="text-white me-3 text-decoration-none" aria-label="TikTok">
-                        <span class="material-symbols-outlined fs-5">videocam</span>
-                    </a>
-                    <a href="https://www.facebook.com" target="_blank" class="text-white text-decoration-none" aria-label="Facebook">
-                        <span class="material-symbols-outlined fs-5">thumb_up</span>
-                    </a>
+                <div class="row text-center p-2">
+                    <span>&copy; 2024 Pegasus Gourmet Experience</span>
                 </div>
-
-                <!-- Informazioni di contatto -->
-                <div class="mb-2">
-                    <p class="mb-0">Telefono: +39 012 345 6789</p>
-                    <p class="mb-0">Email: <a href="mailto:info@pegasusgourmet.com" class="text-dark">info@pegasusgourmet.com</a></p>
-                </div>
-
             </div>
         </footer>
-
+        
+        
 
         <!-- Bootstrap JavaScript Libraries -->
         <script
@@ -140,6 +158,9 @@
             crossorigin="anonymous"
         ></script>
         <script
+            src="{{ url_for('static', filename='js/index.js') }}"
+        ></script>
+        <script
             src="{{ url_for('static', filename='js/gestisci_prenotazione.js') }}"
         ></script>
         <script
@@ -150,3 +171,10 @@
         ></script>
     </body>
 </html>
+<!-- Definisco una variabile css per ottenere dinamicamente l'URL del logo -->
+<style>
+    :root {
+        --logo-url: url("{{ url_for('static', filename='images/logo.svg') }}");
+    }
+</style>
+

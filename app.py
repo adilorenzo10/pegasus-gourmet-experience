@@ -45,7 +45,7 @@ def index(db_session):
     if user_id:
         utente = db_session.query(Utente).filter_by(id=user_id).first()
     
-    return render_template("index.html", utente=utente)
+    return render_template("index.html", utente=utente, header_transparent=True)
 
 # Accedi
 @app.route("/accedi", methods=["GET", "POST"])
