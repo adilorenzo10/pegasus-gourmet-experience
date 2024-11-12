@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div id="carousel-intro" class="carousel slide min-vh-100" data-bs-ride="carousel">
+    <div id="carousel-intro" class="carousel slide h-vh-100" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carousel-intro" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carousel-intro" data-bs-slide-to="1" aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carousel-intro" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-        <div class="carousel-inner min-vh-100">
-            <div class="carousel-item active min-vh-100">
-                <img src="{{ url_for('static', filename='images/slide.webp') }}" class="d-block w-100 h-100" alt="...">
-                <div class="carousel-caption d-flex flex-column justify-content-center h-100 top-0">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{{ url_for('static', filename='images/slide.webp') }}" class="d-block w-100 h-vh-100" alt="...">
+                <div class="carousel-caption d-flex flex-column justify-content-center h-vh-100  top-0">
                     {% if utente %}
                         <h2 class="font-great-vibes">Ciao {{ utente.nome }}, bentornato al Pegasus Gourmet Experience!</h2>
                     {% else %}
@@ -19,16 +19,16 @@
                     <p>Dove l'arte culinaria incontra l'eleganza per offrirvi un'esperienza di gusto indimenticabile.</p>
                 </div>
             </div>
-            <div class="carousel-item min-vh-100">
-                <img src="{{ url_for('static', filename='images/slide2.webp') }}" class="d-block w-100 h-100" alt="...">
-                <div class="carousel-caption d-flex flex-column justify-content-center h-100 top-0">
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='images/slide2.webp') }}" class="d-block w-100 h-vh-100" alt="...">
+                <div class="carousel-caption d-flex flex-column justify-content-center h-vh-100 top-0">
                     <h1 class="font-great-vibes">Qualità e tradizione</h1>
                     <p>Scopri i sapori autentici e ingredienti selezionati con cura, in piatti che raccontano storie di passione e tradizione.</p>
                 </div>
             </div>
-            <div class="carousel-item min-vh-100">
-                <img src="{{ url_for('static', filename='images/slide3.webp') }}" class="d-block w-100 h-100" alt="...">
-                <div class="carousel-caption d-flex flex-column justify-content-center h-100 top-0">
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='images/slide3.webp') }}" class="d-block w-100 h-vh-100" alt="...">
+                <div class="carousel-caption d-flex flex-column justify-content-center h-vh-100 top-0">
                     <h1 class="font-great-vibes">Atmosfera unica</h1>
                     <p>Un ambiente raffinato e accogliente, perfetto per trasformare ogni momento in un ricordo speciale.</p>
                 </div>
