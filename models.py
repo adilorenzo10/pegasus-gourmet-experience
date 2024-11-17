@@ -14,6 +14,7 @@ class Utente(Base):
     cognome = Column(String, nullable=False)
     password_hash = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
+    telefono = Column(Integer, nullable=False)
 
     prenotazioni = relationship("Prenotazione", back_populates="utente")
 

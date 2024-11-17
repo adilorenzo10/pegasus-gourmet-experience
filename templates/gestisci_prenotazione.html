@@ -47,6 +47,13 @@
                         <label for="email">Email</label>
                     </div>
 
+                     <!-- Telefono -->
+                     <div class="form-floating my-3">
+                        <input type="text" class="form-control fst-italic" name="telefono" id="telefono" value="{{utente.telefono}}" disabled >
+                        <label for="telefono">Telefono</label>
+                    </div>
+
+
                     <!-- Numero persone -->
                     <div class="form-floating my-3">
                         <input type="number" class="form-control" name="numero_persone" id="numero_persone" min="1" max="30"  value="{{ prenotazione.numero_persone if prenotazione else '2' }}" required>

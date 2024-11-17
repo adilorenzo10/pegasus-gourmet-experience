@@ -45,8 +45,18 @@
                 <div class="row g-2 mt-2">
                     <div class="col-md">
                         <div class="form-floating">
-                            <input type="email" class="form-control" name="email" id="email" value="{{ utente.email }}"placeholder="" autocomplete="new-password" required >
+                            <input type="email" class="form-control" name="email" id="email" value="{{ utente.email }}" placeholder="" autocomplete="new-password" required >
                             <label for="email">Email</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telefono -->
+                <div class="row g-2 mt-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" name="telefono" id="telefono" value="{{ utente.telefono }}" placeholder="" autocomplete="new-password" required >
+                            <label for="telefono">Telefono</label>
                         </div>
                     </div>
                 </div>

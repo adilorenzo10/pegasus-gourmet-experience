@@ -77,6 +77,7 @@ def registrati(db_session):
         nome_ottenuto = request.form.get("nome")
         cognome_ottenuto = request.form.get("cognome")
         email_ottenuta = request.form.get("email")
+        telefono_ottenuto = request.form.get("telefono")
         password_ottenuta = request.form.get("password")
 
         # Verifica se i campi obbligatori sono vuoti
@@ -95,7 +96,8 @@ def registrati(db_session):
             nuovo_utente = Utente(
                 nome=nome_ottenuto,
                 cognome=cognome_ottenuto,
-                email=email_ottenuta
+                email=email_ottenuta,
+                telefono=telefono_ottenuto
             )
             nuovo_utente.set_password(password_ottenuta)  # Usa `set_password` per hashing e verifica robustezza
             db_session.add(nuovo_utente)
@@ -257,10 +259,13 @@ def modifica_profilo(db_session):
         nome = request.form.get("nome")
         cognome = request.form.get("cognome")
         email = request.form.get("email")
+        telefono = request.form.get("telefono")
         
         setattr(utente, 'nome', nome)
         setattr(utente, 'cognome', cognome)
         setattr(utente, 'email', email)
+        setattr(utente, 'telefono', telefono)
+
 
         if request.form.get("password-attuale") and request.form.get("password"):
             password_attuale = request.form.get("password-attuale")
