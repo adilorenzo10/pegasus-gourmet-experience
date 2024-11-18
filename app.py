@@ -122,7 +122,7 @@ def registrati(db_session):
 @app.route("/prenota", methods=["GET", "POST"])
 @app.route("/modifica-prenotazione/<int:prenotazione_id>", methods=["GET", "POST"])
 @with_db_session
-@login_required("Per favore accedi per prenotare un tavolo. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!")
+@login_required(lambda: f"Per favore accedi per effettuare o modificare una prenotazione. Se non hai ancora un account, <a href='{url_for('registrati')}'>registrati</a> subito!")
 def gestisci_prenotazione(db_session, prenotazione_id=None):
     titolo_pagina = "Prenotazione"
     user_id = session.get("user_id")
@@ -210,13 +210,12 @@ def gestisci_prenotazione(db_session, prenotazione_id=None):
             flash(f"Errore durante la prenotazione", "danger")
             logger.error(f"Errore durante la prenotazione: {e}")
 
-
     return render_template("gestisci_prenotazione.html", utente=utente, orari=orari_prenotabili, today=data_corrente, prenotazione=prenotazione, titolo=titolo_pagina)
 
 # Le mie prenotazioni
 @app.route("/le-mie-prenotazioni")
 @with_db_session
-@login_required("Per favore accedi per visualizzare le tue prenotazioni. Se non hai ancora un account, <a href='/registrati'>registrati</a> subito!")
+@login_required(lambda: f"Per favore accedi per visualizzare le tue prenotazioni. Se non hai ancora un account, <a href='{url_for('registrati')}'>registrati</a> subito!")
 def le_mie_prenotazioni(db_session):
     titolo_pagina = "Le mie prenotazioni"
     user_id = session.get("user_id")

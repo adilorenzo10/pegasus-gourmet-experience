@@ -21,10 +21,11 @@ def login_required(custom_message=None):
         @wraps(f)
         def decorated_function(*args, **kwargs):
             if "user_id" not in session:
-                # Usa il messaggio personalizzato se fornito, altrimenti un messaggio di default
-                message = custom_message or "Accesso non autorizzato. Effettua il login per continuare."
+                # Se custom_message è una funzione, chiamala per ottenere il messaggio
+                message = custom_message() if callable(custom_message) else (custom_message or "Accesso non autorizzato. Effettua il login per continuare.")
                 flash(Markup(message), "warning")
                 return redirect(url_for("accedi"))
             return f(*args, **kwargs)
         return decorated_function
     return decorator
+
