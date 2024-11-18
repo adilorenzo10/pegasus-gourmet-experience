@@ -1,4 +1,3 @@
-//$primary: #854e42;
 $primary: #d2ae6a;
 
 @import "../../node_modules/bootstrap/scss/functions";
@@ -8,10 +7,6 @@ $primary: #d2ae6a;
 
 
 // Stili personalizzati
-nav.navbar .navbar-brand .logo-svg {
-    fill: $primary;
-}
-
 div.bg-primary{
     color: #000000;
 }
