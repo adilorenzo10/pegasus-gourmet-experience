@@ -55,7 +55,7 @@
                     </button>
                     
                     <!-- Menu di navigazione ancorato a destra -->
-                    <div class="collapse navbar-collapse" id="collapsibleNavId">
+                    <div class="collapse navbar-collapse {% if header_transparent %}navbar-transparent{% endif %}" id="collapsibleNavId">
                         <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                             <li class="nav-item">{{ macros.nav_link('index', 'Home') }}</li>
                             <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}#il-nostro-menu">Il nostro menù</a></li>

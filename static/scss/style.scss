@@ -77,11 +77,42 @@ nav.navbar-transparent {
     z-index: 999;
 }
 
+.h-vh-100 {
+    height: 100vh !important;
+}
+
+/*
 main.main-for-nav-trasparent{
     margin-top: -87px;
 }
 
-.h-vh-100 {
-    height: 100vh !important;
+main.main-for-nav-trasparent.collapse-show {
+    margin-top: -294px;
 }
+
+.navbar-collapse.collapse.show, .navbar-collapse.collapsing {
+    background-color: black;
+    padding: 0px 20px 0px 20px;
+}*/
   
+nav.navbar.navbar-transparent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    transition: top 0.3s ease;
+}
+
+main.main-for-nav-trasparent {
+    padding-top: 0px; /* Stessa altezza della navbar */
+}
+
+@media (max-width: 768px) {
+    .navbar-collapse {
+        padding: 10px 20px 10px 20px;
+    }
+    .navbar-collapse.navbar-transparent {
+        background-color: black;
+        border-radius: 10px;
+    }
+}
