@@ -25,16 +25,9 @@ def orari_disponibili():
     orari_esclusi = [
         orario[0] for orario in orari_conteggio if orario.conteggio >= totale_tavoli
     ]
-
+    
     # Ottieni solo gli orari non esclusi
     orari_disponibili = db_session.query(OrarioPrenotabile).filter(~OrarioPrenotabile.id.in_(orari_esclusi)).all()
-
-
-    # Ottieni orari disponibili
-    #orari_prenotati = db_session.query(Prenotazione.orario_prenotabile_id).filter_by(data=data_selezionata).all()
-    #orari_prenotati_ids = [orario[0] for orario in orari_prenotati]
-    #orari_disponibili = db_session.query(OrarioPrenotabile).filter(~OrarioPrenotabile.id.in_(orari_prenotati_ids)).all()
-
     db_session.close()
 
     # Converti orari in JSON
