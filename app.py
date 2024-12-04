@@ -235,9 +235,9 @@ def le_mie_prenotazioni(db_session):
             .order_by(desc(Prenotazione.data), desc(OrarioPrenotabile.orario))  # Ordinamento per data e orario decrescenti
             .all()
         )
-    except ValueError:
-        flash("Seleziona un orario valido.", "danger")
-        return redirect(url_for("prenota"))
+    except ValueError as e:
+        flash("Errore durante il recupero delle prenotazioni effettuate.", "danger")
+        logger.error(f"Errore durante il recupero delle prenotazioni effettuate: {e}")
     
     return render_template("le_mie_prenotazioni.html", prenotazioni = mie_prenotazioni, data_corrente = data_corrente, titolo=titolo_pagina)
 
