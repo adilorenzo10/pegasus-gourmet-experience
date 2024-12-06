@@ -107,6 +107,7 @@ main.main-for-nav-trasparent {
     padding-top: 0px; /* Stessa altezza della navbar */
 }
 
+
 @media (max-width: 768px) {
     .navbar-collapse {
         padding: 10px 20px 10px 20px;
@@ -114,5 +115,18 @@ main.main-for-nav-trasparent {
     .navbar-collapse.navbar-transparent {
         background-color: black;
         border-radius: 10px;
+    }
+    .dropdown-menu.show {
+        background-color: #171717;
+    }
+    .dropdown-menu a.dropdown-item {
+        color: white;
+    }
+
+    .dropdown-menu .dropdown-item.active, 
+    .dropdown-menu .dropdown-item:active,
+    .dropdown-menu .dropdown-item:hover, 
+    .dropdown-menu .dropdown-item:focus{
+        color: black;;
     }
 }
