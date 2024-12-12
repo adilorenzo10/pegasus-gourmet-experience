@@ -13,14 +13,21 @@ if (boolModifica){
 $("#data").on("change", function() {
     $(".sez-orari, .riga-pulsante-prenota, .errore-nessun-orario").addClass("d-none");
     var dataSelezionata = $(this).val();
+    var oggi = new Date().toISOString().split("T")[0]; // Ottiene la data di oggi in formato YYYY-MM-DD
+
+    // Controllo se la data selezionata è minore di oggi
+    if (dataSelezionata < oggi) {
+        $(".errore-nessun-orario .alert").text("Non è ancora possibile tornare indietro nel tempo. Scegli una data futura!");
+        $(".errore-nessun-orario").removeClass("d-none");
+        return; // Termina l'esecuzione se la data non è valida
+    }
 
     // Controllo se sono in modifica e se la data è quella precedentemente salvata
-    if (boolModifica && dataSelezionata == dataPreselezionataInModifica){
+    if (boolModifica && dataSelezionata == dataPreselezionataInModifica) {
         caricaOrariDisponibili(dataSelezionata);
-    }else{
+    } else {
         verificaPrenotazione(dataSelezionata);
     }
-   
 });
 
 // Verifica se l'utente ha già una prenotazione per la data selezionata
